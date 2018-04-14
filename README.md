@@ -2,6 +2,17 @@
 # ProFootballRef
 
 This is a python module that lets you scrape player stats from profootballreference.com.
+### Installation
+```python
+git clone git@github.com:gVkWY8NJAa/ProFootballRef.git
+cd ProFootballRef
+pip install -r requirements.txt
+```
+### Testing
+```python
+cd <path/to/ProFootballRef>
+python3.6 -m pytest tests/
+```
 ### Overview of usage
 
 1. Generate links to scrape.
