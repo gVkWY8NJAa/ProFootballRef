@@ -1,7 +1,7 @@
 
 # ProFootballRef
 
-This is a python module that lets you scrape player stats from profootballreference.com.
+This is a python module that lets you scrape player stats from profootballreference.com and return them as Pandas DataFrames.
 ### Installation
 ```python
 git clone git@github.com:gVkWY8NJAa/ProFootballRef.git
