@@ -1,7 +1,7 @@
 
 # ProFootballRef
 
-Scrape team and player stats from profootballreference.com
+This is a python module that lets you scrape player stats from profootballreference.com.
 ### Overview of usage
 
 1. Generate links to scrape.
