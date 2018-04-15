@@ -1,21 +1,210 @@
 
 # ProFootballRef
 
-This is a python module that lets you scrape player, and team, stats from https://www.pro-football-reference.com/.
+This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame. The toolkit is highly modular such that you are free to use various components as you see fit.
 
-Please consider kicking in the $20/yr to support the site, they do a great job: https://www.pro-football-reference.com/my/?do=ad_free_browsing
-### Installation
-```python
+Please consider contributing the $20/yr to support the site, they do a great job: https://www.pro-football-reference.com/my/?do=ad_free_browsing
+
+## Key Features
+* Aggregate player data for each season.
+* Ability to combine qualitative (height/weight) with quantitative (TDs).
+* Multi column headers have been simplified and closly match the canonical source.
+* Scrape team stats for a given season.
+* Returned objects are Pandas DataFrames for ease of analysis.
+
+## Installation
+```
 git clone git@github.com:gVkWY8NJAa/ProFootballRef.git
 cd ProFootballRef
 pip install -r requirements.txt
 ```
-### Testing
-```python
+## Testing
+```
 cd <path/to/ProFootballRef>
 python3.6 -m pytest tests/
 ```
-## Individual player metrics
+## Usage
+
+### Quick Example
+
+
+```python
+# Individual player statistics
+from ProFootballRef.LinkBuilder import GetPositionLinks 
+from ProFootballRef.Parsers import PlayerParser
+
+links = GetPositionLinks.GetPositionLinks('passing').parse_links(2017)
+html = PlayerParser.PlayerParser().load_page(links[:1][0])
+general_stats = PlayerParser.PlayerParser().parse_general_info(html)
+
+passing_df = PlayerParser.PlayerParser().parse_passing_stats(general_stats, html)
+```
+
+
+```python
+passing_df.head()
+```
+
+
+
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Year</th>
+      <th>Age</th>
+      <th>Throws</th>
+      <th>Height</th>
+      <th>Weight</th>
+      <th>DOB_mo</th>
+      <th>DOB_day</th>
+      <th>DOB_yr</th>
+      <th>College</th>
+      <th>...</th>
+      <th>Rec_Yds</th>
+      <th>Y/R</th>
+      <th>Rec_TD</th>
+      <th>Rec_Lng</th>
+      <th>R/G</th>
+      <th>Rec_Y/G</th>
+      <th>Ctch%</th>
+      <th>YScm</th>
+      <th>RRTD</th>
+      <th>Fmb</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Tom Brady</td>
+      <td>2001</td>
+      <td>24.0</td>
+      <td>Right</td>
+      <td>76</td>
+      <td>225</td>
+      <td>8</td>
+      <td>3</td>
+      <td>1977</td>
+      <td>Michigan</td>
+      <td>...</td>
+      <td>23.0</td>
+      <td>23.0</td>
+      <td>0.0</td>
+      <td>23.0</td>
+      <td>0.1</td>
+      <td>1.5</td>
+      <td>100.0%</td>
+      <td>66</td>
+      <td>0</td>
+      <td>12.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Tom Brady</td>
+      <td>2002</td>
+      <td>25.0</td>
+      <td>Right</td>
+      <td>76</td>
+      <td>225</td>
+      <td>8</td>
+      <td>3</td>
+      <td>1977</td>
+      <td>Michigan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>110</td>
+      <td>1</td>
+      <td>11.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Tom Brady</td>
+      <td>2003</td>
+      <td>26.0</td>
+      <td>Right</td>
+      <td>76</td>
+      <td>225</td>
+      <td>8</td>
+      <td>3</td>
+      <td>1977</td>
+      <td>Michigan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>63</td>
+      <td>1</td>
+      <td>13.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Tom Brady</td>
+      <td>2004</td>
+      <td>27.0</td>
+      <td>Right</td>
+      <td>76</td>
+      <td>225</td>
+      <td>8</td>
+      <td>3</td>
+      <td>1977</td>
+      <td>Michigan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>28</td>
+      <td>0</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Tom Brady</td>
+      <td>2005</td>
+      <td>28.0</td>
+      <td>Right</td>
+      <td>76</td>
+      <td>225</td>
+      <td>8</td>
+      <td>3</td>
+      <td>1977</td>
+      <td>Michigan</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>89</td>
+      <td>1</td>
+      <td>4.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 58 columns</p>
+</div>
+
+
+
+### Detailed Usage
 
 Individual player metrics are gathered using a five step process to allow you granular control as to how much data you want to obtain. The modularity also aids in refactoring if/when the website code is ever updated:
 1. Generate links to scrape.
@@ -23,8 +212,6 @@ Individual player metrics are gathered using a five step process to allow you gr
 3. Parse general info such as height and weight from the returned html.
 4. Parse performance metrics specific to the position.
 5. Combine the general heigh/weight with the performance metrics.
-
-### Specific Usage
 
 
 ```python
@@ -109,10 +296,15 @@ general_stats
 Then, we will call the parser specific to the position, and pass to it the general_stats dict in the last step, as well as our html object from before. 
 
 You can choose from:
+
 **parse_receiver_stats()**
+
 **parse_rushing_stats()**
+
 **parse_passisng_stats()**
+
 **parse_defense_stats()**
+
 **parse_kicking_stats()**
 
 Each of these parsers will return a Pandas DataFrame object.
