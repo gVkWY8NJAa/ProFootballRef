@@ -20,19 +20,19 @@ class GetPositionLinks:
             return 0
 
     def parse_links(self, year):
-        # load the positions page
+        # load the positions page for the given year
         url = self.url % year
         page = requests.get(url, headers={
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) '
                           'Chrome/51.0.2704.103 Safari/537.36'})
         content = page.content.decode()
 
-        # Parse urls from the position page that point to the players page
+        # Parse urls from the position page that point to the individuals players page
         players = re.compile(
             'data-append-csv=".*?" data-stat="player" csk=".*?" ><a href="(\/players\/[a-zA-Z]\/.*?.htm)"').findall(
             content)
 
-        # Since they're relative links, attach the base url and append to a list to be returned
+        # Since they are relative links, attach the base url and append to a list to be returned
         links = []
         for x in players:
             links.append('https://www.pro-football-reference.com' + x)

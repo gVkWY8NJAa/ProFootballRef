@@ -1,10 +1,10 @@
-from ProFootballRef import GetPositionLinks
+from LinkBuilder.GetPositionLinks import GetPositionLinks
 
-receiving = GetPositionLinks.GetPositionLinks('receiving').parse_links('2017')
-rushing = GetPositionLinks.GetPositionLinks('rushing').parse_links('2017')
-passing = GetPositionLinks.GetPositionLinks('passing').parse_links('2017')
-defense = GetPositionLinks.GetPositionLinks('defense').parse_links('2017')
-kicking = GetPositionLinks.GetPositionLinks('kicking').parse_links('2017')
+receiving = GetPositionLinks('receiving').parse_links('2017')
+rushing = GetPositionLinks('rushing').parse_links('2017')
+passing = GetPositionLinks('passing').parse_links('2017')
+defense = GetPositionLinks('defense').parse_links('2017')
+kicking = GetPositionLinks('kicking').parse_links('2017')
 
 def test_receiving():
     assert type(receiving) == list
