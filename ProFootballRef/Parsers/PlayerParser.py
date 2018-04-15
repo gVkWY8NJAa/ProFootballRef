@@ -42,7 +42,7 @@ class PlayerParser:
         general_stats['bday_day'] = int(bday.split('-')[2])
         general_stats['bday_yr'] = int(bday.split('-')[0])
 
-        general_stats['college'] = re.compile('<a href="\/schools\/\w+\/">(.*?)<\/a>').findall(html)[0]
+        general_stats['college'] = re.compile('<a href="\/schools\/\w+.*?\/">(.*?)<\/a>').findall(html)[0]
 
         return general_stats
 
