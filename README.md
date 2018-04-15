@@ -8,7 +8,7 @@ Please consider contributing the $20/yr to support the site, they do a great job
 ## Key Features
 * Aggregate player data for each season.
 * Ability to combine qualitative (height/weight) with quantitative (TDs).
-* Multi column headers have been simplified and closly match the canonical source.
+* Multi column headers have been simplified and closely match the canonical source.
 * Scrape team stats for a given season.
 * Returned objects are Pandas DataFrames for ease of analysis.
 
