@@ -1,7 +1,7 @@
 
 # ProFootballRef
 
-This is a python module that lets you scrape player stats from profootballreference.com.
+This is a python module that lets you scrape player, and team, stats from profootballreference.com.
 ### Installation
 ```python
 git clone git@github.com:gVkWY8NJAa/ProFootballRef.git
@@ -13,20 +13,16 @@ pip install -r requirements.txt
 cd <path/to/ProFootballRef>
 python3.6 -m pytest tests/
 ```
-### Overview of usage
+## Individual player metrics
 
+Individual player metrics are gathered using a five step process to allow you granular control as to how much data you want to obtain. The modularity also aids in refactoring if/when the website code is ever updated:
 1. Generate links to scrape.
-2. Request and return html for each link.
+2. Request, and return, html for each link.
 3. Parse general info such as height and weight from the returned html.
 4. Parse performance metrics specific to the position.
 5. Combine the general heigh/weight with the performance metrics.
 
-## Specific Usage
-Import modules in the form of:
-```python
-<module name>.<sub module>.<module file>
-```
-See https://docs.python.org/dev/tutorial/modules.html#packages for more information regarding packages
+### Specific Usage
 
 
 ```python
@@ -288,22 +284,186 @@ df.head()
 
 
 
+## Team metrics
+
 
 ```python
-df.columns
+from ProFootballRef.Parsers import TeamStats
+```
+
+### Team offense stats
+Simply pass a season (year) to the **offense()** method in the **TeamStats()** class
+
+
+```python
+year = 2015
+```
+
+
+```python
+df = TeamStats.TeamStats().offense(year)
+```
+
+
+```python
+df.head()
 ```
 
 
 
 
-    Index(['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo',
-           'DOB_day', 'DOB_yr', 'College', 'Tm', 'Pos', 'No.', 'G', 'GS', 'QBrec',
-           'Cmp', 'Att', 'Cmp%', 'Yds', 'TD', 'TD%', 'Int', 'Int%', 'Lng',
-           'Pass_Y/A', 'AY/A', 'Y/C', 'Y/G', 'Rate', 'QBR', 'Sk', 'Sk_Yds', 'NY/A',
-           'ANY/A', 'Sk%', '4QC', 'GWD', 'AV', 'Rush', 'Rush_Yds', 'Rush_TD',
-           'Rush_Lng', 'Rush_Y/A', 'Rush_Y/G', 'A/G', 'Tgt', 'Rec', 'Rec_Yds',
-           'Y/R', 'Rec_TD', 'Rec_Lng', 'R/G', 'Rec_Y/G', 'Ctch%', 'YScm', 'RRTD',
-           'Fmb'],
-          dtype='object')
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Tm</th>
+      <th>G</th>
+      <th>PF</th>
+      <th>Yds</th>
+      <th>Ply</th>
+      <th>Y/P</th>
+      <th>TO</th>
+      <th>FL</th>
+      <th>1stD</th>
+      <th>Pass_Cmp</th>
+      <th>...</th>
+      <th>Rush_Yds</th>
+      <th>Rush_TD</th>
+      <th>Y/A</th>
+      <th>Rush_1stD</th>
+      <th>Pen</th>
+      <th>Pen_Yds</th>
+      <th>1stPy</th>
+      <th>Sc%</th>
+      <th>TO%</th>
+      <th>EXP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Carolina Panthers</td>
+      <td>16.0</td>
+      <td>500.0</td>
+      <td>5871.0</td>
+      <td>1060.0</td>
+      <td>5.5</td>
+      <td>19.0</td>
+      <td>9.0</td>
+      <td>357.0</td>
+      <td>300.0</td>
+      <td>...</td>
+      <td>2282.0</td>
+      <td>19.0</td>
+      <td>4.3</td>
+      <td>136.0</td>
+      <td>103.0</td>
+      <td>887.0</td>
+      <td>24.0</td>
+      <td>42.9</td>
+      <td>9.6</td>
+      <td>125.65</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Arizona Cardinals</td>
+      <td>16.0</td>
+      <td>489.0</td>
+      <td>6533.0</td>
+      <td>1041.0</td>
+      <td>6.3</td>
+      <td>24.0</td>
+      <td>11.0</td>
+      <td>373.0</td>
+      <td>353.0</td>
+      <td>...</td>
+      <td>1917.0</td>
+      <td>16.0</td>
+      <td>4.2</td>
+      <td>92.0</td>
+      <td>94.0</td>
+      <td>758.0</td>
+      <td>44.0</td>
+      <td>42.5</td>
+      <td>11.8</td>
+      <td>161.96</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>New England Patriots</td>
+      <td>16.0</td>
+      <td>465.0</td>
+      <td>5991.0</td>
+      <td>1050.0</td>
+      <td>5.7</td>
+      <td>14.0</td>
+      <td>7.0</td>
+      <td>348.0</td>
+      <td>404.0</td>
+      <td>...</td>
+      <td>1404.0</td>
+      <td>14.0</td>
+      <td>3.7</td>
+      <td>87.0</td>
+      <td>96.0</td>
+      <td>860.0</td>
+      <td>31.0</td>
+      <td>43.2</td>
+      <td>5.7</td>
+      <td>127.68</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Pittsburgh Steelers</td>
+      <td>16.0</td>
+      <td>423.0</td>
+      <td>6327.0</td>
+      <td>1011.0</td>
+      <td>6.3</td>
+      <td>28.0</td>
+      <td>7.0</td>
+      <td>331.0</td>
+      <td>391.0</td>
+      <td>...</td>
+      <td>1724.0</td>
+      <td>16.0</td>
+      <td>4.4</td>
+      <td>91.0</td>
+      <td>94.0</td>
+      <td>868.0</td>
+      <td>33.0</td>
+      <td>40.5</td>
+      <td>13.7</td>
+      <td>116.15</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Seattle Seahawks</td>
+      <td>16.0</td>
+      <td>423.0</td>
+      <td>6058.0</td>
+      <td>1035.0</td>
+      <td>5.9</td>
+      <td>16.0</td>
+      <td>8.0</td>
+      <td>335.0</td>
+      <td>333.0</td>
+      <td>...</td>
+      <td>2268.0</td>
+      <td>10.0</td>
+      <td>4.5</td>
+      <td>128.0</td>
+      <td>117.0</td>
+      <td>1007.0</td>
+      <td>17.0</td>
+      <td>42.0</td>
+      <td>8.6</td>
+      <td>132.31</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 27 columns</p>
+</div>
 
 
