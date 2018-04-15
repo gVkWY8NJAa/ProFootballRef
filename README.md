@@ -701,7 +701,7 @@ all_qb.groupby(['Name']).sum()
 
 
 
-### Scrape multiple players pages form multiple seasons
+### Scrape multiple players pages from multiple seasons
 If you need to get players from multiple seasons, it is easiest to make a pruned list of players to avoid overlap. Then just literate through the list like above.
 
 
