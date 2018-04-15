@@ -29,7 +29,7 @@ python3.6 -m pytest tests/
 
 
 ```python
-# Individual player statistics
+# Individual player statistics for passing
 from ProFootballRef.LinkBuilder import GetPositionLinks 
 from ProFootballRef.Parsers import PlayerParser
 
@@ -478,7 +478,8 @@ df.head()
 
 
 
-### Scrape multiple players pages
+### Scrape multiple players pages for a given season
+**This will generate a ton of traffic to the website so use caution.**
 
 
 ```python
@@ -514,7 +515,7 @@ for player in links[:5]:
 
 
 ```python
-all_qb.groupby(['Name', 'Year', 'Yds']).sum()
+all_qb.groupby(['Name']).sum()
 ```
 
 
@@ -525,8 +526,7 @@ all_qb.groupby(['Name', 'Year', 'Yds']).sum()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th></th>
-      <th></th>
+      <th>Year</th>
       <th>Age</th>
       <th>Height</th>
       <th>Weight</th>
@@ -536,7 +536,6 @@ all_qb.groupby(['Name', 'Year', 'Yds']).sum()
       <th>No.</th>
       <th>G</th>
       <th>Cmp</th>
-      <th>Att</th>
       <th>...</th>
       <th>Rec</th>
       <th>Rec_Yds</th>
@@ -551,8 +550,6 @@ all_qb.groupby(['Name', 'Year', 'Yds']).sum()
     </tr>
     <tr>
       <th>Name</th>
-      <th>Year</th>
-      <th>Yds</th>
       <th></th>
       <th></th>
       <th></th>
@@ -578,1023 +575,89 @@ all_qb.groupby(['Name', 'Year', 'Yds']).sum()
   </thead>
   <tbody>
     <tr>
-      <th rowspan="14" valign="top">Ben Roethlisberger</th>
-      <th>2004</th>
-      <th>2621</th>
-      <td>22.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>14</td>
-      <td>196</td>
-      <td>295.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>144</td>
-      <td>1</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>2005</th>
-      <th>2385</th>
-      <td>23.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>12</td>
-      <td>168</td>
-      <td>268.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>69</td>
-      <td>3</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>2006</th>
-      <th>3513</th>
-      <td>24.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>15</td>
-      <td>280</td>
-      <td>469.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
+      <th>Ben Roethlisberger</th>
+      <td>28147</td>
+      <td>399.0</td>
+      <td>1078</td>
+      <td>3360</td>
+      <td>42</td>
+      <td>28</td>
+      <td>27748</td>
       <td>98</td>
-      <td>2</td>
-      <td>5.0</td>
-    </tr>
-    <tr>
-      <th>2007</th>
-      <th>3154</th>
-      <td>25.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>15</td>
-      <td>264</td>
-      <td>404.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>204</td>
-      <td>2</td>
-      <td>9.0</td>
-    </tr>
-    <tr>
-      <th>2008</th>
-      <th>3301</th>
-      <td>26.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>16</td>
-      <td>281</td>
-      <td>469.0</td>
+      <td>200</td>
+      <td>4164</td>
       <td>...</td>
       <td>1.0</td>
-      <td>-7.0</td>
+      <td>-11.0</td>
       <td>-7.0</td>
       <td>0.0</td>
-      <td>-7.0</td>
+      <td>-8.0</td>
       <td>0.1</td>
-      <td>-0.4</td>
-      <td>94</td>
-      <td>2</td>
-      <td>14.0</td>
-    </tr>
-    <tr>
-      <th>2009</th>
-      <th>4328</th>
-      <td>27.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>15</td>
-      <td>337</td>
-      <td>506.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>82</td>
-      <td>2</td>
-      <td>7.0</td>
-    </tr>
-    <tr>
-      <th>2010</th>
-      <th>3200</th>
-      <td>28.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>12</td>
-      <td>240</td>
-      <td>389.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>176</td>
-      <td>2</td>
-      <td>6.0</td>
-    </tr>
-    <tr>
-      <th>2011</th>
-      <th>4077</th>
-      <td>29.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>15</td>
-      <td>324</td>
-      <td>513.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>70</td>
-      <td>0</td>
-      <td>9.0</td>
-    </tr>
-    <tr>
-      <th>2012</th>
-      <th>3265</th>
-      <td>30.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>13</td>
-      <td>284</td>
-      <td>449.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>92</td>
-      <td>0</td>
-      <td>6.0</td>
-    </tr>
-    <tr>
-      <th>2013</th>
-      <th>4261</th>
-      <td>31.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
+      <td>-0.8</td>
+      <td>1241</td>
       <td>16</td>
-      <td>375</td>
-      <td>584.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>5.0</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>5.0</td>
-      <td>0.0</td>
-      <td>0.3</td>
-      <td>104</td>
-      <td>1</td>
-      <td>9.0</td>
+      <td>91.0</td>
     </tr>
     <tr>
-      <th>2014</th>
-      <th>4952</th>
-      <td>32.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>16</td>
-      <td>408</td>
-      <td>608.0</td>
+      <th>Eli Manning</th>
+      <td>28147</td>
+      <td>413.0</td>
+      <td>1064</td>
+      <td>3052</td>
+      <td>14</td>
+      <td>42</td>
+      <td>27734</td>
+      <td>140</td>
+      <td>216</td>
+      <td>4424</td>
       <td>...</td>
-      <td>0.0</td>
-      <td>-6.0</td>
       <td>NaN</td>
-      <td>0.0</td>
-      <td>-6.0</td>
-      <td>0.0</td>
-      <td>-0.4</td>
-      <td>21</td>
-      <td>0</td>
-      <td>9.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>540</td>
+      <td>6</td>
+      <td>115.0</td>
     </tr>
     <tr>
-      <th>2015</th>
-      <th>3938</th>
-      <td>33.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>12</td>
-      <td>319</td>
-      <td>469.0</td>
+      <th>Matthew Stafford</th>
+      <td>18117</td>
+      <td>225.0</td>
+      <td>666</td>
+      <td>2070</td>
+      <td>18</td>
+      <td>63</td>
+      <td>17892</td>
+      <td>81</td>
+      <td>125</td>
+      <td>3005</td>
       <td>...</td>
+      <td>2.0</td>
+      <td>-3.0</td>
+      <td>-3.0</td>
       <td>0.0</td>
       <td>-3.0</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-0.3</td>
-      <td>26</td>
-      <td>0</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>2016</th>
-      <th>3819</th>
-      <td>34.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
+      <td>0.2</td>
+      <td>-0.2</td>
+      <td>946</td>
       <td>14</td>
-      <td>328</td>
-      <td>509.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>14</td>
-      <td>1</td>
-      <td>8.0</td>
+      <td>57.0</td>
     </tr>
     <tr>
-      <th>2017</th>
-      <th>4251</th>
-      <td>35.0</td>
-      <td>77</td>
-      <td>240</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1982</td>
-      <td>7</td>
-      <td>15</td>
-      <td>360</td>
-      <td>561.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>47</td>
-      <td>0</td>
-      <td>3.0</td>
-    </tr>
-    <tr>
-      <th rowspan="14" valign="top">Eli Manning</th>
-      <th>2004</th>
-      <th>1043</th>
-      <td>23.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>9</td>
-      <td>95</td>
-      <td>197.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>35</td>
-      <td>0</td>
-      <td>3.0</td>
-    </tr>
-    <tr>
-      <th>2005</th>
-      <th>3762</th>
-      <td>24.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>294</td>
-      <td>557.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>80</td>
-      <td>1</td>
-      <td>9.0</td>
-    </tr>
-    <tr>
-      <th>2006</th>
-      <th>3244</th>
-      <td>25.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>301</td>
-      <td>522.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>21</td>
-      <td>0</td>
-      <td>9.0</td>
-    </tr>
-    <tr>
-      <th>2007</th>
-      <th>3336</th>
-      <td>26.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>297</td>
-      <td>529.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>69</td>
-      <td>1</td>
-      <td>13.0</td>
-    </tr>
-    <tr>
-      <th>2008</th>
-      <th>3238</th>
-      <td>27.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>289</td>
-      <td>479.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>10</td>
-      <td>1</td>
-      <td>5.0</td>
-    </tr>
-    <tr>
-      <th>2009</th>
-      <th>4021</th>
-      <td>28.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>317</td>
-      <td>509.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>65</td>
-      <td>0</td>
-      <td>13.0</td>
-    </tr>
-    <tr>
-      <th>2010</th>
-      <th>4002</th>
-      <td>29.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>339</td>
-      <td>539.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>70</td>
-      <td>0</td>
-      <td>7.0</td>
-    </tr>
-    <tr>
-      <th>2011</th>
-      <th>4933</th>
-      <td>30.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>359</td>
-      <td>589.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>15</td>
-      <td>1</td>
-      <td>8.0</td>
-    </tr>
-    <tr>
-      <th>2012</th>
-      <th>3948</th>
-      <td>31.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>321</td>
-      <td>536.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>30</td>
-      <td>0</td>
-      <td>5.0</td>
-    </tr>
-    <tr>
-      <th>2013</th>
-      <th>3818</th>
-      <td>32.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>317</td>
-      <td>551.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>36</td>
-      <td>0</td>
-      <td>7.0</td>
-    </tr>
-    <tr>
-      <th>2014</th>
-      <th>4410</th>
-      <td>33.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>379</td>
-      <td>601.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>31</td>
-      <td>1</td>
-      <td>7.0</td>
-    </tr>
-    <tr>
-      <th>2015</th>
-      <th>4432</th>
-      <td>34.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>387</td>
-      <td>618.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>61</td>
-      <td>0</td>
-      <td>11.0</td>
-    </tr>
-    <tr>
-      <th>2016</th>
-      <th>4027</th>
-      <td>35.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>16</td>
-      <td>377</td>
-      <td>598.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-9</td>
-      <td>0</td>
-      <td>7.0</td>
-    </tr>
-    <tr>
-      <th>2017</th>
-      <th>3468</th>
-      <td>36.0</td>
-      <td>76</td>
-      <td>218</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1981</td>
-      <td>10</td>
-      <td>15</td>
-      <td>352</td>
-      <td>571.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>26</td>
-      <td>1</td>
-      <td>11.0</td>
-    </tr>
-    <tr>
-      <th rowspan="2" valign="top">Matthew Stafford</th>
-      <th>2009</th>
-      <th>2267</th>
-      <td>21.0</td>
-      <td>74</td>
-      <td>230</td>
-      <td>2</td>
-      <td>7</td>
-      <td>1988</td>
-      <td>9</td>
-      <td>10</td>
-      <td>201</td>
-      <td>377.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>108</td>
-      <td>2</td>
-      <td>4.0</td>
-    </tr>
-    <tr>
-      <th>2010</th>
-      <th>535</th>
-      <td>22.0</td>
-      <td>74</td>
-      <td>230</td>
-      <td>2</td>
-      <td>7</td>
-      <td>1988</td>
-      <td>9</td>
-      <td>3</td>
-      <td>57</td>
-      <td>96.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>11</td>
-      <td>1</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <th>...</th>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th rowspan="14" valign="top">Philip Rivers</th>
-      <th>2004</th>
-      <th>33</th>
-      <td>23.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>2</td>
-      <td>5</td>
-      <td>8.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-5</td>
-      <td>0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>2005</th>
-      <th>115</th>
-      <td>24.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>2</td>
-      <td>12</td>
-      <td>22.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-1</td>
-      <td>0</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>2006</th>
-      <th>3388</th>
-      <td>25.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>284</td>
-      <td>460.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>49</td>
-      <td>0</td>
-      <td>8.0</td>
-    </tr>
-    <tr>
-      <th>2007</th>
-      <th>3152</th>
-      <td>26.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>277</td>
-      <td>460.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>33</td>
-      <td>1</td>
-      <td>11.0</td>
-    </tr>
-    <tr>
-      <th>2008</th>
-      <th>4009</th>
-      <td>27.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>312</td>
-      <td>478.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>84</td>
-      <td>0</td>
-      <td>8.0</td>
-    </tr>
-    <tr>
-      <th>2009</th>
-      <th>4254</th>
-      <td>28.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>317</td>
-      <td>486.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>50</td>
-      <td>1</td>
-      <td>6.0</td>
-    </tr>
-    <tr>
-      <th>2010</th>
-      <th>4710</th>
-      <td>29.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>357</td>
-      <td>541.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>52</td>
-      <td>0</td>
-      <td>7.0</td>
-    </tr>
-    <tr>
-      <th>2011</th>
-      <th>4624</th>
-      <td>30.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>366</td>
-      <td>582.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>36</td>
-      <td>1</td>
-      <td>9.0</td>
-    </tr>
-    <tr>
-      <th>2012</th>
-      <th>3606</th>
-      <td>31.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>338</td>
-      <td>527.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>40</td>
-      <td>0</td>
-      <td>15.0</td>
-    </tr>
-    <tr>
-      <th>2013</th>
-      <th>4478</th>
-      <td>32.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>378</td>
-      <td>544.0</td>
+      <th>Philip Rivers</th>
+      <td>28147</td>
+      <td>413.0</td>
+      <td>1078</td>
+      <td>3192</td>
+      <td>168</td>
+      <td>112</td>
+      <td>27734</td>
+      <td>238</td>
+      <td>196</td>
+      <td>4171</td>
       <td>...</td>
       <td>0.0</td>
       <td>-9.0</td>
@@ -1603,535 +666,102 @@ all_qb.groupby(['Name', 'Year', 'Yds']).sum()
       <td>-9.0</td>
       <td>0.0</td>
       <td>-0.6</td>
-      <td>63</td>
-      <td>0</td>
-      <td>3.0</td>
-    </tr>
-    <tr>
-      <th>2014</th>
-      <th>4286</th>
-      <td>33.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>379</td>
-      <td>570.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>102</td>
-      <td>0</td>
-      <td>8.0</td>
-    </tr>
-    <tr>
-      <th>2015</th>
-      <th>4792</th>
-      <td>34.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>437</td>
-      <td>661.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>28</td>
-      <td>0</td>
-      <td>4.0</td>
-    </tr>
-    <tr>
-      <th>2016</th>
-      <th>4386</th>
-      <td>35.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>349</td>
-      <td>578.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>35</td>
-      <td>0</td>
-      <td>9.0</td>
-    </tr>
-    <tr>
-      <th>2017</th>
-      <th>4515</th>
-      <td>36.0</td>
-      <td>77</td>
-      <td>228</td>
-      <td>12</td>
-      <td>8</td>
-      <td>1981</td>
-      <td>17</td>
-      <td>16</td>
-      <td>360</td>
-      <td>575.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-2</td>
-      <td>0</td>
-      <td>8.0</td>
-    </tr>
-    <tr>
-      <th rowspan="16" valign="top">Tom Brady</th>
-      <th>2001</th>
-      <th>2843</th>
-      <td>24.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
+      <td>564</td>
       <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>15</td>
-      <td>264</td>
-      <td>413.0</td>
-      <td>...</td>
-      <td>1.0</td>
-      <td>23.0</td>
-      <td>23.0</td>
-      <td>0.0</td>
-      <td>23.0</td>
-      <td>0.1</td>
-      <td>1.5</td>
-      <td>66</td>
-      <td>0</td>
-      <td>12.0</td>
+      <td>99.0</td>
     </tr>
     <tr>
-      <th>2002</th>
-      <th>3764</th>
-      <td>25.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>373</td>
-      <td>601.0</td>
+      <th>Tom Brady</th>
+      <td>32145</td>
+      <td>513.0</td>
+      <td>1216</td>
+      <td>3600</td>
+      <td>128</td>
+      <td>48</td>
+      <td>31632</td>
+      <td>192</td>
+      <td>251</td>
+      <td>5621</td>
       <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>110</td>
-      <td>1</td>
-      <td>11.0</td>
-    </tr>
-    <tr>
-      <th>2003</th>
-      <th>3620</th>
-      <td>26.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>317</td>
-      <td>527.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>63</td>
-      <td>1</td>
-      <td>13.0</td>
-    </tr>
-    <tr>
-      <th>2004</th>
-      <th>3692</th>
-      <td>27.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>288</td>
-      <td>474.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>28</td>
-      <td>0</td>
-      <td>7.0</td>
-    </tr>
-    <tr>
-      <th>2005</th>
-      <th>4110</th>
-      <td>28.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>334</td>
-      <td>530.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>89</td>
-      <td>1</td>
-      <td>4.0</td>
-    </tr>
-    <tr>
-      <th>2006</th>
-      <th>3529</th>
-      <td>29.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>319</td>
-      <td>516.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>102</td>
-      <td>0</td>
-      <td>12.0</td>
-    </tr>
-    <tr>
-      <th>2007</th>
-      <th>4806</th>
-      <td>30.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>398</td>
-      <td>578.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>98</td>
-      <td>2</td>
-      <td>6.0</td>
-    </tr>
-    <tr>
-      <th>2009</th>
-      <th>4398</th>
-      <td>32.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>371</td>
-      <td>565.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>44</td>
-      <td>1</td>
-      <td>4.0</td>
-    </tr>
-    <tr>
-      <th>2010</th>
-      <th>3900</th>
-      <td>33.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>324</td>
-      <td>492.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>30</td>
-      <td>1</td>
-      <td>3.0</td>
-    </tr>
-    <tr>
-      <th>2011</th>
-      <th>5235</th>
-      <td>34.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>401</td>
-      <td>611.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>109</td>
-      <td>3</td>
-      <td>6.0</td>
-    </tr>
-    <tr>
-      <th>2012</th>
-      <th>4827</th>
-      <td>35.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>401</td>
-      <td>637.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>32</td>
-      <td>4</td>
       <td>2.0</td>
-    </tr>
-    <tr>
-      <th>2013</th>
-      <th>4343</th>
-      <td>36.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>380</td>
-      <td>628.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>18</td>
-      <td>0</td>
-      <td>10.0</td>
-    </tr>
-    <tr>
-      <th>2014</th>
-      <th>4109</th>
-      <td>37.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>373</td>
-      <td>582.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>57</td>
-      <td>0</td>
-      <td>6.0</td>
-    </tr>
-    <tr>
-      <th>2015</th>
-      <th>4770</th>
-      <td>38.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>402</td>
-      <td>624.0</td>
-      <td>...</td>
-      <td>1.0</td>
-      <td>36.0</td>
-      <td>36.0</td>
+      <td>59.0</td>
+      <td>59.0</td>
       <td>0.0</td>
-      <td>36.0</td>
-      <td>0.1</td>
-      <td>2.3</td>
-      <td>89</td>
-      <td>3</td>
-      <td>6.0</td>
-    </tr>
-    <tr>
-      <th>2016</th>
-      <th>3554</th>
-      <td>39.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>12</td>
-      <td>291</td>
-      <td>432.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>64</td>
-      <td>0</td>
-      <td>5.0</td>
-    </tr>
-    <tr>
-      <th>2017</th>
-      <th>4577</th>
-      <td>40.0</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>12</td>
-      <td>16</td>
-      <td>385</td>
-      <td>581.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>28</td>
-      <td>0</td>
-      <td>7.0</td>
+      <td>59.0</td>
+      <td>0.2</td>
+      <td>3.8</td>
+      <td>1027</td>
+      <td>17</td>
+      <td>114.0</td>
     </tr>
   </tbody>
 </table>
-<p>67 rows × 48 columns</p>
+<p>5 rows × 50 columns</p>
 </div>
 
 
 
-## Team metrics
+### Scrape multiple players pages form multiple seasons
+If you need to get players from multiple seasons, it is easiest to make a pruned list of players to avoid overlap. Then just literate through the list like above.
 
 
 ```python
-from ProFootballRef.Parsers import TeamStats
+big_list = []
+for year in range(2015,2017):
+    big_list = big_list + GetPositionLinks.GetPositionLinks('passing').parse_links(year)
 ```
+
+
+```python
+# this will contain duplicate urls
+len(big_list)
+```
+
+
+
+
+    182
+
+
+
+
+```python
+# remove the duplicate urls
+pruned_list = list(dict.fromkeys(big_list))
+```
+
+
+```python
+len(pruned_list)
+```
+
+
+
+
+    129
+
+
+
+You would then simply iterate through this list and call:
+```python
+load_page(url)
+parse_general_info(html)
+parse_passing_stats(general_stats, html)
+``` 
+The result would be a DataFrame of 129 different passing players. 
+
+**Again, this will generate a ton of traffic to the website so use caution.**
+
+## Team metrics
 
 ### Team offense stats
 Simply pass a season (year) to the **offense()** method in the **TeamStats()** class
 
 
 ```python
+from ProFootballRef.Parsers import TeamStats
+
 year = 2015
-```
-
-
-```python
 df = TeamStats.TeamStats().offense(year)
 ```
 
@@ -2291,6 +921,181 @@ df.head()
       <td>42.0</td>
       <td>8.6</td>
       <td>132.31</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 27 columns</p>
+</div>
+
+
+
+### Team defense stats
+Simply pass a season (year) to the **defense()** method in the **TeamStats()** class
+
+
+```python
+from ProFootballRef.Parsers import TeamStats
+
+year = 2015
+df = TeamStats.TeamStats().defense(year)
+```
+
+
+```python
+df.head()
+```
+
+
+
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Tm</th>
+      <th>G</th>
+      <th>PF</th>
+      <th>Yds</th>
+      <th>Ply</th>
+      <th>Y/P</th>
+      <th>TO</th>
+      <th>FL</th>
+      <th>1stD</th>
+      <th>Pass_Cmp</th>
+      <th>...</th>
+      <th>Rush_Yds</th>
+      <th>Rush_TD</th>
+      <th>Y/A</th>
+      <th>Rush_1stD</th>
+      <th>Pen</th>
+      <th>Pen_Yds</th>
+      <th>1stPy</th>
+      <th>Sc%</th>
+      <th>TO%</th>
+      <th>EXP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Seattle Seahawks</td>
+      <td>16.0</td>
+      <td>277.0</td>
+      <td>4668.0</td>
+      <td>947.0</td>
+      <td>4.9</td>
+      <td>23.0</td>
+      <td>9.0</td>
+      <td>273.0</td>
+      <td>333.0</td>
+      <td>...</td>
+      <td>1304.0</td>
+      <td>10.0</td>
+      <td>3.6</td>
+      <td>71.0</td>
+      <td>94.0</td>
+      <td>795.0</td>
+      <td>27.0</td>
+      <td>29.3</td>
+      <td>13.2</td>
+      <td>50.54</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Cincinnati Bengals</td>
+      <td>16.0</td>
+      <td>279.0</td>
+      <td>5453.0</td>
+      <td>1032.0</td>
+      <td>5.3</td>
+      <td>28.0</td>
+      <td>7.0</td>
+      <td>307.0</td>
+      <td>415.0</td>
+      <td>...</td>
+      <td>1477.0</td>
+      <td>8.0</td>
+      <td>4.3</td>
+      <td>74.0</td>
+      <td>116.0</td>
+      <td>1063.0</td>
+      <td>31.0</td>
+      <td>28.9</td>
+      <td>15.0</td>
+      <td>24.23</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Kansas City Chiefs</td>
+      <td>16.0</td>
+      <td>287.0</td>
+      <td>5269.0</td>
+      <td>1037.0</td>
+      <td>5.1</td>
+      <td>29.0</td>
+      <td>7.0</td>
+      <td>313.0</td>
+      <td>349.0</td>
+      <td>...</td>
+      <td>1571.0</td>
+      <td>7.0</td>
+      <td>4.1</td>
+      <td>86.0</td>
+      <td>110.0</td>
+      <td>941.0</td>
+      <td>34.0</td>
+      <td>27.3</td>
+      <td>15.3</td>
+      <td>69.97</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Denver Broncos</td>
+      <td>16.0</td>
+      <td>296.0</td>
+      <td>4530.0</td>
+      <td>1033.0</td>
+      <td>4.4</td>
+      <td>27.0</td>
+      <td>13.0</td>
+      <td>289.0</td>
+      <td>344.0</td>
+      <td>...</td>
+      <td>1337.0</td>
+      <td>10.0</td>
+      <td>3.3</td>
+      <td>81.0</td>
+      <td>104.0</td>
+      <td>773.0</td>
+      <td>46.0</td>
+      <td>26.9</td>
+      <td>11.9</td>
+      <td>146.71</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Minnesota Vikings</td>
+      <td>16.0</td>
+      <td>302.0</td>
+      <td>5510.0</td>
+      <td>1015.0</td>
+      <td>5.4</td>
+      <td>22.0</td>
+      <td>9.0</td>
+      <td>318.0</td>
+      <td>359.0</td>
+      <td>...</td>
+      <td>1748.0</td>
+      <td>7.0</td>
+      <td>4.3</td>
+      <td>94.0</td>
+      <td>109.0</td>
+      <td>875.0</td>
+      <td>35.0</td>
+      <td>33.3</td>
+      <td>11.9</td>
+      <td>3.87</td>
     </tr>
   </tbody>
 </table>
