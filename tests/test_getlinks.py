@@ -1,4 +1,4 @@
-from LinkBuilder.GetPositionLinks import GetPositionLinks
+from ProFootballRef.LinkBuilder.GetPositionLinks import GetPositionLinks
 
 receiving = GetPositionLinks('receiving').parse_links('2017')
 rushing = GetPositionLinks('rushing').parse_links('2017')
