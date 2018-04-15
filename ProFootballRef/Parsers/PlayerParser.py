@@ -25,8 +25,7 @@ class PlayerParser:
         general_stats['name'] = re.compile('<h1 itemprop="name">(.*?)\s*<\/h1>').findall(html)[0]
 
         try:
-            general_stats['throws'] = re.compile('<strong>Throws:<\/strong>\\n\\t\\t(.*?)\\n\\t\\n<\/p>').findall(html)[
-                0]
+            general_stats['throws'] = re.compile('<strong>Throws:<\/strong>\\n\\t\\t(.*?)\\n\\t\\n<\/p>').findall(html)[0]
         except:
             general_stats['throws'] = np.nan
 
@@ -42,7 +41,10 @@ class PlayerParser:
         general_stats['bday_day'] = int(bday.split('-')[2])
         general_stats['bday_yr'] = int(bday.split('-')[0])
 
-        general_stats['college'] = re.compile('<a href="\/schools\/\w+\/">(.*?)<\/a>').findall(html)[0]
+        try:
+            general_stats['college'] = re.compile('<a href="\/schools\/\w+.*?\/">(.*?)<\/a>').findall(html)[0]
+        except:
+            general_stats['college'] = np.nan
 
         return general_stats
 
