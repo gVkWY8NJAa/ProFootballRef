@@ -154,9 +154,8 @@ class PlayerParser:
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
 
-        cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'QBrec', 'Cmp', 'Att',
-                'Cmp%', 'Yds', 'TD', 'TD%', 'Int', 'Int%', 'Lng', 'Pass_Y/A', 'AY/A',
-                'Y/C', 'Y/G', 'Rate', 'QBR', 'Sk', 'Sk_Yds', 'NY/A', 'ANY/A', 'Sk%',
+        cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'QBrec', 'Cmp', 'Att', 'Cmp%', 'Yds', 'TD', 'TD%', 'Int',
+                'Int%', 'Lng', 'Pass_Y/A', 'AY/A', 'Y/C', 'Y/G', 'Rate', 'QBR', 'Sk', 'Sk_Yds', 'NY/A', 'ANY/A', 'Sk%',
                 '4QC', 'GWD', 'AV']
         df.columns = cols
 
@@ -206,8 +205,7 @@ class PlayerParser:
         # rename columns
         new_cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'Rush', 'Rush_Yds', 'Rush_TD', 'Rush_Lng', 'Rush_Y/A',
                     'Rush_Y/G', 'A/G', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng', 'R/G', 'Rec_Y/G', 'Ctch%',
-                    'YScm',
-                    'RRTD', 'Fmb']
+                    'YScm', 'RRTD', 'Fmb']
 
         rush_df.columns = new_cols
 
@@ -245,6 +243,7 @@ class PlayerParser:
 
         cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'Int', 'Yds', 'TD', 'Lng', 'PD', 'FF', 'Fmb', 'FR',
                 'Fmb_Yds','Fmb_TD', 'Sk', 'Tkl', 'Ast', 'Sfty', 'AV']
+
         df.columns = cols
 
         # remove the career totals row
@@ -290,10 +289,8 @@ class PlayerParser:
 
         # rename columns from origional multirow colums
         cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', '0-19FGA', '0-19FGM', '20-29FGA', '20-29FGM', '30-39FGA',
-                '30-39FGM',
-                '40-49FGA', '40-49FGM', '50+FGA', '50+FGM', 'scr_FGA', 'scr_FGM', 'Lng', 'scr_FG%', 'scr_XPA',
-                'scr_XPM',
-                'scr_XP%', 'Pnt', 'Yds', 'Lng', 'Blck', 'Y/P', 'AV']
+                '30-39FGM', '40-49FGA', '40-49FGM', '50+FGA', '50+FGM', 'scr_FGA', 'scr_FGM', 'Lng', 'scr_FG%',
+                'scr_XPA', 'scr_XPM', 'scr_XP%', 'Pnt', 'Yds', 'Lng', 'Blck', 'Y/P', 'AV']
 
         df.columns = cols
 
