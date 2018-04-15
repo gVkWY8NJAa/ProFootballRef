@@ -22,11 +22,16 @@ python3.6 -m pytest tests/
 5. Combine the general heigh/weight with the performance metrics.
 
 ## Specific Usage
+Import modules in the form of:
+```python
+<module name>.<sub module>.<module file>
+```
+See https://docs.python.org/dev/tutorial/modules.html#packages for more information regarding packages
 
 
 ```python
-from LinkBuilder.GetPositionLinks import GetPositionLinks
-from Parsers.PlayerParser import PlayerParser
+from ProFootballRef.LinkBuilder import GetPositionLinks 
+from ProFootballRef.Parsers import PlayerParser
 ```
 
 First we need to generate pages to scrape based on position. This is a two step process.
@@ -37,7 +42,7 @@ First we need to generate pages to scrape based on position. This is a two step 
 ```python
 position = 'passing'
 season = 2017
-links = GetPositionLinks(position).parse_links(season)
+links = GetPositionLinks.GetPositionLinks(position).parse_links(season)
 ```
 
 As you can see below, a list of urls is returned for each player of the position, and season, that was requested.
@@ -74,14 +79,14 @@ links[:1][0]
 
 
 ```python
-html = PlayerParser().load_page(links[:1][0])
+html = PlayerParser.PlayerParser().load_page(links[:1][0])
 ```
 
 Each player has qualitative information such as height, weight, date of birth etc. so we will grab that by passing our html object to the **parse_general_info()** method which will return a dict of the info:
 
 
 ```python
-general_stats = PlayerParser().parse_general_info(html)
+general_stats = PlayerParser.PlayerParser().parse_general_info(html)
 ```
 
 
@@ -116,7 +121,7 @@ Each of these parsers will return a Pandas DataFrame object.
 
 
 ```python
-df = PlayerParser().parse_passing_stats(general_stats, html)
+df = PlayerParser.PlayerParser().parse_passing_stats(general_stats, html)
 ```
 
 
