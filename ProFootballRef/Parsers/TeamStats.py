@@ -30,4 +30,27 @@ class TeamStats:
         # Remove last row
         df = df[df.Tm != 'Avg Team']
 
+        # Ensure values are numeric
+        df[cols] = df[cols].apply(pd.to_numeric, errors='ignore')
+
         return df
+
+    def defense(self, year):
+        defense = pd.read_html('https://www.pro-football-reference.com/years/%s/opp.htm' % (year))[0]
+
+        # drop rk and multiple unuse cols
+        defense = defense.iloc[:, 1:28]
+
+        # rename cols
+        cols = ['Tm', 'G', 'PF', 'Yds', 'Ply', 'Y/P', 'TO', 'FL', '1stD', 'Pass_Cmp', 'Pass_Att', 'Pass_Yds', 'Pass_TD',
+                'Int', 'NY/A', 'Pass_1stD', 'Rush_Att', 'Rush_Yds', 'Rush_TD', 'Y/A', 'Rush_1stD', 'Pen', 'Pen_Yds',
+                '1stPy', 'Sc%', 'TO%', 'EXP']
+        defense.columns = cols
+
+        # drop avg row
+        defense = defense[defense.Tm != 'Avg Team']
+
+        # Ensure values are numeric
+        defense[cols] = defense[cols].apply(pd.to_numeric, errors='ignore')
+
+        return defense
