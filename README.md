@@ -1,7 +1,7 @@
 
 # ProFootballRef
 
-This is a python module that lets you scrape player stats from profootballreference.com and return them as Pandas DataFrames.
+This is a python module that lets you scrape player stats from profootballreference.com.
 ### Installation
 ```python
 git clone git@github.com:gVkWY8NJAa/ProFootballRef.git
@@ -25,8 +25,8 @@ python3.6 -m pytest tests/
 
 
 ```python
-from ProFootballRef import GetPositionLinks
-from ProFootballRef import PlayerParser
+from LinkBuilder.GetPositionLinks import GetPositionLinks
+from Parsers.PlayerParser import PlayerParser
 ```
 
 First we need to generate pages to scrape based on position. This is a two step process.
@@ -37,7 +37,7 @@ First we need to generate pages to scrape based on position. This is a two step 
 ```python
 position = 'passing'
 season = 2017
-links = GetPositionLinks.GetPositionLinks(position).parse_links(season)
+links = GetPositionLinks(position).parse_links(season)
 ```
 
 As you can see below, a list of urls is returned for each player of the position, and season, that was requested.
@@ -74,14 +74,14 @@ links[:1][0]
 
 
 ```python
-html = PlayerParser.PlayerParser().load_page(links[:1][0])
+html = PlayerParser().load_page(links[:1][0])
 ```
 
 Each player has qualitative information such as height, weight, date of birth etc. so we will grab that by passing our html object to the **parse_general_info()** method which will return a dict of the info:
 
 
 ```python
-general_stats = PlayerParser.PlayerParser().parse_general_info(html)
+general_stats = PlayerParser().parse_general_info(html)
 ```
 
 
@@ -116,7 +116,7 @@ Each of these parsers will return a Pandas DataFrame object.
 
 
 ```python
-df = PlayerParser.PlayerParser().parse_passing_stats(general_stats, html)
+df = PlayerParser().parse_passing_stats(general_stats, html)
 ```
 
 
