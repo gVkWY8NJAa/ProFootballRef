@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/gVkWY8NJAa/ProFootballRef.svg?branch=master)](https://travis-ci.org/gVkWY8NJAa/ProFootballRef)
 # ProFootballRef
 
-This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame. The toolkit is highly modular such that you are free to use various components as you see fit.
+This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame. The toolkit is highly modular such that you are free to use various components as you see fit. This code is very alpha at this point, expect major changes often.
 
 Please consider contributing the $20/yr to support the site, they do a great job: https://www.pro-football-reference.com/my/?do=ad_free_browsing
 

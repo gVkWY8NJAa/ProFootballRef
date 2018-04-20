@@ -1,20 +1,12 @@
-import requests
 import re
 import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup, Comment
+from ProFootballRef.Tools import Loader
 
 class PlayerParser:
     def __init__(self):
         pass
-
-    def load_page(self, url):
-        # load and return the html which will hit various parsers, each with their own purpose
-        page = requests.get(url, headers={
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) '
-                          'Chrome/51.0.2704.103 Safari/537.36'})
-        html = page.content.decode()
-        return html
 
     def parse_general_info(self, html):
 
@@ -48,7 +40,18 @@ class PlayerParser:
 
         return general_stats
 
-    def parse_receiver_stats(self, general_stats, html):
+    def parse_receiver_stats(self, url=None, **kwargs):
+        # We generally pass in a url and then load the page, for testing the function allow html to be passed in
+        if url:
+            response = Loader.Loader().load_page(url)
+            html = response.content.decode()
+        else:
+            for k, v in kwargs.items():
+                if k == 'html':
+                    html = v
+
+        #Scrape general stats
+        general_stats = self.parse_general_info(html)
 
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
@@ -98,7 +101,18 @@ class PlayerParser:
 
         return df
 
-    def parse_rushing_stats(self, general_stats, html):
+    def parse_rushing_stats(self, url=None, **kwargs):
+        # We generally pass in a url and then load the page, for testing the function allow html to be passed in
+        if url:
+            response = Loader.Loader().load_page(url)
+            html = response.content.decode()
+        else:
+            for k, v in kwargs.items():
+                if k == 'html':
+                    html = v
+
+        # Scrape general stats
+        general_stats = self.parse_general_info(html)
 
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
@@ -151,7 +165,18 @@ class PlayerParser:
 
         return df
 
-    def parse_passing_stats(self, general_stats, html):
+    def parse_passing_stats(self, url=None, **kwargs):
+        # We generally pass in a url and then load the page, for testing the function allow html to be passed in
+        if url:
+            response = Loader.Loader().load_page(url)
+            html = response.content.decode()
+        else:
+            for k,v in kwargs.items():
+                if k == 'html':
+                    html = v
+
+        # Scrape general stats
+        general_stats = self.parse_general_info(html)
 
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
@@ -211,7 +236,7 @@ class PlayerParser:
 
         rush_df.columns = new_cols
 
-        ##munge the columns similar to above
+        # munge the columns similar to above
         # remove the career totals row
         rush_df = rush_df[rush_df.Year != 'Career']
 
@@ -236,7 +261,18 @@ class PlayerParser:
 
         return combined_df
 
-    def parse_defense_stats(self, general_stats, html):
+    def parse_defense_stats(self, url=None, **kwargs):
+        # We generally pass in a url and then load the page, for testing the function allow html to be passed in
+        if url:
+            response = Loader.Loader().load_page(url)
+            html = response.content.decode()
+        else:
+            for k, v in kwargs.items():
+                if k == 'html':
+                    html = v
+
+        # Scrape general stats
+        general_stats = self.parse_general_info(html)
 
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
@@ -281,7 +317,18 @@ class PlayerParser:
 
         return df
 
-    def parse_kicking_stats(self, general_stats, html):
+    def parse_kicking_stats(self, url=None, **kwargs):
+        # We generally pass in a url and then load the page, for testing the function allow html to be passed in
+        if url:
+            response = Loader.Loader().load_page(url)
+            html = response.content.decode()
+        else:
+            for k, v in kwargs.items():
+                if k == 'html':
+                    html = v
+
+        # Scrape general stats
+        general_stats = self.parse_general_info(html)
 
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
