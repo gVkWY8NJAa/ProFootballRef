@@ -16,6 +16,8 @@ class PlayerParser:
         # scrape data off the players page not contained in the stats table
         general_stats['name'] = re.compile('<h1 itemprop="name">(.*?)\s*<\/h1>').findall(html)[0]
 
+        general_stats['position'] = re.compile('<strong>Position<\/strong>:\W([a-zA-Z]{1,})').findall(html)[0]
+
         try:
             general_stats['throws'] = re.compile('<strong>Throws:<\/strong>\\n\\t\\t(.*?)\\n\\t\\n<\/p>').findall(html)[0]
         except:
@@ -93,10 +95,13 @@ class PlayerParser:
         df['DOB_yr'] = general_stats['bday_yr']
         df['College'] = general_stats['college']
 
+        # This is hacky but position info isn't always contained in every row
+        if df['Pos'].isnull().values.any():
+            df['Pos'] = general_stats['position']
+
         # rearange the dataframe columns, this is personal preference
-        df = df[
-            ['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College', 'Tm', 'Pos',
-             'No', 'G', 'GS', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng', 'R/G', 'Rec_Y/G', 'Ctch%', 'Rush',
+        df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College',
+                 'Tm', 'Pos', 'No', 'G', 'GS', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng', 'R/G', 'Rec_Y/G', 'Ctch%', 'Rush',
              'Rush_Yds', 'Rush_TD', 'Rush_Lng', 'Y/A', 'Rush_Y/G', 'A/G', 'YScm', 'RRTD', 'Fmb', 'AV']]
 
         return df
@@ -157,6 +162,10 @@ class PlayerParser:
         df['DOB_yr'] = general_stats['bday_yr']
         df['College'] = general_stats['college']
 
+        # This is hacky but position info isn't always contained in every row
+        if df['Pos'].isnull().values.any():
+            df['Pos'] = general_stats['position']
+
         # rearange the dataframe columns, this is personal preference
         df = df[
             ['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College', 'Tm', 'Pos',
@@ -212,6 +221,11 @@ class PlayerParser:
         df['DOB_day'] = general_stats['bday_day']
         df['DOB_yr'] = general_stats['bday_yr']
         df['College'] = general_stats['college']
+
+        # This is hacky but position info isn't always contained in every row
+        if df['Pos'].isnull().values.any():
+            df['Pos'] = general_stats['position']
+
 
         # rearange the dataframe columns, this is personal preference
         df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College',
@@ -311,6 +325,10 @@ class PlayerParser:
         df['DOB_yr'] = general_stats['bday_yr']
         df['College'] = general_stats['college']
 
+        # This is hacky but position info isn't always contained in every row
+        if df['Pos'].isnull().values.any():
+            df['Pos'] = general_stats['position']
+
         df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College', 'Tm',
                  'Pos', 'No.', 'G', 'GS', 'Int', 'Yds', 'TD', 'Lng', 'PD', 'FF', 'Fmb', 'FR', 'Fmb_Yds', 'Fmb_TD',
                  'Sk', 'Tkl', 'Ast', 'Sfty', 'AV']]
@@ -369,6 +387,10 @@ class PlayerParser:
         df['DOB_day'] = general_stats['bday_day']
         df['DOB_yr'] = general_stats['bday_yr']
         df['College'] = general_stats['college']
+
+        # This is hacky but position info isn't always contained in every row
+        if df['Pos'].isnull().values.any():
+            df['Pos'] = general_stats['position']
 
         df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College', 'Tm',
                  'Pos', 'No.', 'G', 'GS', '0-19FGA', '0-19FGM', '20-29FGA', '20-29FGM', '30-39FGA', '30-39FGM',

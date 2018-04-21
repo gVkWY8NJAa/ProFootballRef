@@ -29,6 +29,11 @@ class TestGeneralParsing:
         gen = general_parser(html)
         assert gen['weight'] == 225
 
+    def test_general_info_position(self, passing_req):
+        html = passing_req.content.decode()
+        gen = general_parser(html)
+        assert gen['position'] == 'QB'
+
 
 class TestPassing:
 
@@ -38,6 +43,10 @@ class TestPassing:
         df = PlayerParser.PlayerParser().parse_passing_stats(html=html)
         assert df.iloc[0]['Name'] == 'Tom Brady'
 
+    def test_df_pos(self, passing_req):
+        html = passing_req.content.decode()
+        df = PlayerParser.PlayerParser().parse_passing_stats(html=html)
+        assert df.iloc[0]['Pos'] == 'QB'
 
 class TestReceiving:
 
@@ -46,6 +55,11 @@ class TestReceiving:
         html = receiving_req.content.decode()
         df = PlayerParser.PlayerParser().parse_receiver_stats(html=html)
         assert df.iloc[0]['Name'] == 'Antonio Brown'
+
+    def test_df_pos(self, receiving_req):
+        html = receiving_req.content.decode()
+        df = PlayerParser.PlayerParser().parse_receiver_stats(html=html)
+        assert df.iloc[0]['Pos'] == 'WR'
 
 
 class TestRushing:
