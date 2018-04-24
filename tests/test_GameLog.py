@@ -15,4 +15,3 @@ class TestGamelogPassing:
         df = GamelogParser.GameLog().gamelog_passing(urls['passing'], 2001)
         assert df['pass_yds'].sum() == 2843
 
-    
