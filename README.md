@@ -656,28 +656,21 @@ If you need to get players from multiple seasons, it is easiest to make a pruned
 ```python
 big_list = []
 for year in range(2015,2017):
-    big_list = big_list + GetPositionLinks.GetPositionLinks('passing').parse_links(year)
+    big_list = big_list + GetPositionLinks.GetPositionLinks('passing').player_links(year)
 ```
-
-
-    ---------------------------------------------------------------------------
-
-    AttributeError                            Traceback (most recent call last)
-
-    <ipython-input-10-7ca3eebb51eb> in <module>()
-          1 big_list = []
-          2 for year in range(2015,2017):
-    ----> 3     big_list = big_list + GetPositionLinks.GetPositionLinks('passing').parse_links(year)
-
-
-    AttributeError: 'GetPositionLinks' object has no attribute 'parse_links'
-
 
 
 ```python
 # this will contain duplicate urls
 len(big_list)
 ```
+
+
+
+
+    182
+
+
 
 
 ```python
@@ -689,6 +682,13 @@ pruned_list = list(dict.fromkeys(big_list))
 ```python
 len(pruned_list)
 ```
+
+
+
+
+    129
+
+
 
 You would then simply iterate through the "pruned_list" and call:
 ```python
@@ -716,6 +716,165 @@ df = TeamStats.TeamStats().offense(year)
 df.head()
 ```
 
+
+
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Tm</th>
+      <th>G</th>
+      <th>PF</th>
+      <th>Yds</th>
+      <th>Ply</th>
+      <th>Y/P</th>
+      <th>TO</th>
+      <th>FL</th>
+      <th>1stD</th>
+      <th>Pass_Cmp</th>
+      <th>...</th>
+      <th>Rush_Yds</th>
+      <th>Rush_TD</th>
+      <th>Y/A</th>
+      <th>Rush_1stD</th>
+      <th>Pen</th>
+      <th>Pen_Yds</th>
+      <th>1stPy</th>
+      <th>Sc%</th>
+      <th>TO%</th>
+      <th>EXP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Carolina Panthers</td>
+      <td>16.0</td>
+      <td>500.0</td>
+      <td>5871.0</td>
+      <td>1060.0</td>
+      <td>5.5</td>
+      <td>19.0</td>
+      <td>9.0</td>
+      <td>357.0</td>
+      <td>300.0</td>
+      <td>...</td>
+      <td>2282.0</td>
+      <td>19.0</td>
+      <td>4.3</td>
+      <td>136.0</td>
+      <td>103.0</td>
+      <td>887.0</td>
+      <td>24.0</td>
+      <td>42.9</td>
+      <td>9.6</td>
+      <td>125.65</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Arizona Cardinals</td>
+      <td>16.0</td>
+      <td>489.0</td>
+      <td>6533.0</td>
+      <td>1041.0</td>
+      <td>6.3</td>
+      <td>24.0</td>
+      <td>11.0</td>
+      <td>373.0</td>
+      <td>353.0</td>
+      <td>...</td>
+      <td>1917.0</td>
+      <td>16.0</td>
+      <td>4.2</td>
+      <td>92.0</td>
+      <td>94.0</td>
+      <td>758.0</td>
+      <td>44.0</td>
+      <td>42.5</td>
+      <td>11.8</td>
+      <td>161.96</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>New England Patriots</td>
+      <td>16.0</td>
+      <td>465.0</td>
+      <td>5991.0</td>
+      <td>1050.0</td>
+      <td>5.7</td>
+      <td>14.0</td>
+      <td>7.0</td>
+      <td>348.0</td>
+      <td>404.0</td>
+      <td>...</td>
+      <td>1404.0</td>
+      <td>14.0</td>
+      <td>3.7</td>
+      <td>87.0</td>
+      <td>96.0</td>
+      <td>860.0</td>
+      <td>31.0</td>
+      <td>43.2</td>
+      <td>5.7</td>
+      <td>127.68</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Pittsburgh Steelers</td>
+      <td>16.0</td>
+      <td>423.0</td>
+      <td>6327.0</td>
+      <td>1011.0</td>
+      <td>6.3</td>
+      <td>28.0</td>
+      <td>7.0</td>
+      <td>331.0</td>
+      <td>391.0</td>
+      <td>...</td>
+      <td>1724.0</td>
+      <td>16.0</td>
+      <td>4.4</td>
+      <td>91.0</td>
+      <td>94.0</td>
+      <td>868.0</td>
+      <td>33.0</td>
+      <td>40.5</td>
+      <td>13.7</td>
+      <td>116.15</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Seattle Seahawks</td>
+      <td>16.0</td>
+      <td>423.0</td>
+      <td>6058.0</td>
+      <td>1035.0</td>
+      <td>5.9</td>
+      <td>16.0</td>
+      <td>8.0</td>
+      <td>335.0</td>
+      <td>333.0</td>
+      <td>...</td>
+      <td>2268.0</td>
+      <td>10.0</td>
+      <td>4.5</td>
+      <td>128.0</td>
+      <td>117.0</td>
+      <td>1007.0</td>
+      <td>17.0</td>
+      <td>42.0</td>
+      <td>8.6</td>
+      <td>132.31</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 27 columns</p>
+</div>
+
+
+
 ### Team defense stats
 Simply pass a season (year) to the **defense()** method in the **TeamStats()** class
 
@@ -731,3 +890,160 @@ df = TeamStats.TeamStats().defense(year)
 ```python
 df.head()
 ```
+
+
+
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Tm</th>
+      <th>G</th>
+      <th>PF</th>
+      <th>Yds</th>
+      <th>Ply</th>
+      <th>Y/P</th>
+      <th>TO</th>
+      <th>FL</th>
+      <th>1stD</th>
+      <th>Pass_Cmp</th>
+      <th>...</th>
+      <th>Rush_Yds</th>
+      <th>Rush_TD</th>
+      <th>Y/A</th>
+      <th>Rush_1stD</th>
+      <th>Pen</th>
+      <th>Pen_Yds</th>
+      <th>1stPy</th>
+      <th>Sc%</th>
+      <th>TO%</th>
+      <th>EXP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Seattle Seahawks</td>
+      <td>16.0</td>
+      <td>277.0</td>
+      <td>4668.0</td>
+      <td>947.0</td>
+      <td>4.9</td>
+      <td>23.0</td>
+      <td>9.0</td>
+      <td>273.0</td>
+      <td>333.0</td>
+      <td>...</td>
+      <td>1304.0</td>
+      <td>10.0</td>
+      <td>3.6</td>
+      <td>71.0</td>
+      <td>94.0</td>
+      <td>795.0</td>
+      <td>27.0</td>
+      <td>29.3</td>
+      <td>13.2</td>
+      <td>50.54</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Cincinnati Bengals</td>
+      <td>16.0</td>
+      <td>279.0</td>
+      <td>5453.0</td>
+      <td>1032.0</td>
+      <td>5.3</td>
+      <td>28.0</td>
+      <td>7.0</td>
+      <td>307.0</td>
+      <td>415.0</td>
+      <td>...</td>
+      <td>1477.0</td>
+      <td>8.0</td>
+      <td>4.3</td>
+      <td>74.0</td>
+      <td>116.0</td>
+      <td>1063.0</td>
+      <td>31.0</td>
+      <td>28.9</td>
+      <td>15.0</td>
+      <td>24.23</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Kansas City Chiefs</td>
+      <td>16.0</td>
+      <td>287.0</td>
+      <td>5269.0</td>
+      <td>1037.0</td>
+      <td>5.1</td>
+      <td>29.0</td>
+      <td>7.0</td>
+      <td>313.0</td>
+      <td>349.0</td>
+      <td>...</td>
+      <td>1571.0</td>
+      <td>7.0</td>
+      <td>4.1</td>
+      <td>86.0</td>
+      <td>110.0</td>
+      <td>941.0</td>
+      <td>34.0</td>
+      <td>27.3</td>
+      <td>15.3</td>
+      <td>69.97</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Denver Broncos</td>
+      <td>16.0</td>
+      <td>296.0</td>
+      <td>4530.0</td>
+      <td>1033.0</td>
+      <td>4.4</td>
+      <td>27.0</td>
+      <td>13.0</td>
+      <td>289.0</td>
+      <td>344.0</td>
+      <td>...</td>
+      <td>1337.0</td>
+      <td>10.0</td>
+      <td>3.3</td>
+      <td>81.0</td>
+      <td>104.0</td>
+      <td>773.0</td>
+      <td>46.0</td>
+      <td>26.9</td>
+      <td>11.9</td>
+      <td>146.71</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Minnesota Vikings</td>
+      <td>16.0</td>
+      <td>302.0</td>
+      <td>5510.0</td>
+      <td>1015.0</td>
+      <td>5.4</td>
+      <td>22.0</td>
+      <td>9.0</td>
+      <td>318.0</td>
+      <td>359.0</td>
+      <td>...</td>
+      <td>1748.0</td>
+      <td>7.0</td>
+      <td>4.3</td>
+      <td>94.0</td>
+      <td>109.0</td>
+      <td>875.0</td>
+      <td>35.0</td>
+      <td>33.3</td>
+      <td>11.9</td>
+      <td>3.87</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 27 columns</p>
+</div>
