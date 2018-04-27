@@ -74,10 +74,8 @@ class GameLog:
 
         # parse tables w pandas
         df = pd.read_html(html)[0]
-        print(len(df.columns))
 
         which_cols = hashlib.md5(json.dumps(list(df.columns.levels[0])).encode()).hexdigest()
-        print(which_cols)
 
         if which_cols == "64b4c5df667e588d59b856ae9d724c7d":
             df = Passhash.PassHash().md564b4c5df667e588d59b856ae9d724c7d(df)
@@ -118,13 +116,21 @@ class GameLog:
         # send df to the common parser
         df = self.common(df, year)
 
-        # Add the name
+        # Ensure any commonly missing values are set
         df.loc[:, 'Name'] = gen['name']
-
-        # Add the players position
         df.loc[:, 'Pos'] = gen['position']
 
-        df = df[['Name', 'Pos', 'Date'] + self.base[1:] + self.passing + self.rushing + self.receiving + self.rush_sk
-                + self.scoring2p + self.scoring + self.punting]
+        # add additional player info
+        df['Throws'] = gen['throws']
+        df['Height'] = gen['height']
+        df['Weight'] = gen['weight']
+        df['DOB_mo'] = gen['bday_mo']
+        df['DOB_day'] = gen['bday_day']
+        df['DOB_yr'] = gen['bday_yr']
+        df['College'] = gen['college']
+
+        df = df[['Name','Pos', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College'] + self.base[1:] +
+                ['PF', 'PA'] + self.passing + self.rushing + self.receiving + self.rush_sk + self.scoring2p +
+                self.scoring + self.punting]
 
         return df
