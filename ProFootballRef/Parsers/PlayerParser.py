@@ -42,7 +42,7 @@ class PlayerParser:
 
         return general_stats
 
-    def parse_receiver_stats(self, url=None, **kwargs):
+    def receiving(self, url=None, **kwargs):
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
         if url:
             response = Loader.Loader().load_page(url)
@@ -106,7 +106,7 @@ class PlayerParser:
 
         return df
 
-    def parse_rushing_stats(self, url=None, **kwargs):
+    def rushing(self, url=None, **kwargs):
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
         if url:
             response = Loader.Loader().load_page(url)
@@ -174,7 +174,7 @@ class PlayerParser:
 
         return df
 
-    def parse_passing_stats(self, url=None, **kwargs):
+    def passing(self, url=None, **kwargs):
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
         if url:
             response = Loader.Loader().load_page(url)
@@ -275,7 +275,7 @@ class PlayerParser:
 
         return combined_df
 
-    def parse_defense_stats(self, url=None, **kwargs):
+    def defense(self, url=None, **kwargs):
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
         if url:
             response = Loader.Loader().load_page(url)
@@ -335,7 +335,7 @@ class PlayerParser:
 
         return df
 
-    def parse_kicking_stats(self, url=None, **kwargs):
+    def kicking(self, url=None, **kwargs):
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
         if url:
             response = Loader.Loader().load_page(url)

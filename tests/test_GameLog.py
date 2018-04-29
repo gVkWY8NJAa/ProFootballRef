@@ -12,12 +12,12 @@ urls = {'passing' : 'https://www.pro-football-reference.com/players/B/BradTo00.h
 class TestGamelogPassing:
 
     def test_brady_2001(self):
-        df = GamelogParser.GameLog().gamelog_passing(urls['passing'], 2001)
+        df = GamelogParser.GameLog().passing(urls['passing'], 2001)
         assert df['pass_yds'].sum() == 2843
 
 
 class TestGamelogReceiving:
 
     def test_brown_2013(self):
-        df = GamelogParser.GameLog().gamelog_receiving(urls['receiving'], 2013)
+        df = GamelogParser.GameLog().receiving(urls['receiving'], 2013)
         assert df['Rec_TD'].sum() == 8

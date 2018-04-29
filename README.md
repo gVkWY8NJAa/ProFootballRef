@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/gVkWY8NJAa/ProFootballRef.svg?branch=master)](https://travis-ci.org/gVkWY8NJAa/ProFootballRef)
 # ProFootballRef
 
-This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame. The toolkit is highly modular such that you are free to use various components as you see fit.
+This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame.
 
 Please consider contributing the $20/yr to support the site, they do a great job: https://www.pro-football-reference.com/my/?do=ad_free_browsing
 
@@ -11,7 +11,7 @@ Please consider contributing the $20/yr to support the site, they do a great job
 * Ability to combine qualitative (height/weight) with quantitative (TDs).
 * Multi column headers have been simplified and closly match the canonical source.
 * Scrape team stats for a given season.
-* Scrape player gamelogs
+* Player gamelog data available for a given season.
 * Returned objects are Pandas DataFrames for ease of analysis.
 
 ## Installation
@@ -36,7 +36,7 @@ from ProFootballRef.LinkBuilder import GetPositionLinks
 from ProFootballRef.Parsers import PlayerParser
 
 links = GetPositionLinks.GetPositionLinks('passing').player_links(2017)
-passing_df = PlayerParser.PlayerParser().parse_passing_stats(links[:1][0])
+passing_df = PlayerParser.PlayerParser().passing(links[:1][0])
 ```
 
 
@@ -218,7 +218,7 @@ from ProFootballRef.LinkBuilder import GetPositionLinks
 from ProFootballRef.Parsers import PlayerParser
 ```
 
-First we need to generate pages to scrape based on position. There are two arguments that need to be passed to do this.
+First we need to generate pages to scrape based on position. This is a two step process.
 1. Pass a position to the **GetPositionLinks()** class: passing, receiving, rushing, kicking, or defense. This tells the class which url it needs to request.
 2. Pass a season (year) to the **player_links()** function to get the players of the corresponding position who played during the season.
 
@@ -251,21 +251,21 @@ Then, we will call the parser specific to the position, and pass to it a url tha
 
 You can choose from:
 
-**parse_receiver_stats()**
+**receiving()**
 
-**parse_rushing_stats()**
+**rushing()**
 
-**parse_passisng_stats()**
+**passing()**
 
-**parse_defense_stats()**
+**defense()**
 
-**parse_kicking_stats()**
+**kicking()**
 
 Each of these parsers will return a Pandas DataFrame object.
 
 
 ```python
-df = PlayerParser.PlayerParser().parse_passing_stats(links[:1][0])
+df = PlayerParser.PlayerParser().passing(links[:1][0])
 ```
 
 
@@ -455,10 +455,10 @@ links = GetPositionLinks.GetPositionLinks(position).player_links(season)
 for player in links[:5]:
 
     # pass the url to the position parser
-    stats = PlayerParser.PlayerParser().parse_passing_stats(player)
+    stats = PlayerParser.PlayerParser().passing(player)
 
     # concat the results with our catch all dataframe
-    all_qb = pd.concat([all_qb, stats], axis=0)   
+    all_qb = pd.concat([all_qb, stats], axis=0)
 ```
 
 
@@ -692,7 +692,7 @@ len(pruned_list)
 
 You would then simply iterate through the "pruned_list" and call:
 ```python
-parse_passing_stats(url)
+PlayerParser.PlayerParser().passing(url)
 ```
 The result would be a DataFrame of 129 different passing players.
 

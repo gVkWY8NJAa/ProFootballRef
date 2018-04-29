@@ -27,7 +27,7 @@ class GameLog:
         homemap = {'H': True, '@': False}
         dframe.loc[:, 'Home'] = dframe.loc[:, 'Home'].map(homemap)
 
-        # map home game started
+        # map if the player was listed as a starter, this is only used for QBs
         if 'GS' in dframe.columns:
             dframe.loc[:, 'GS'] = dframe.loc[:, 'GS'].fillna('False')
             gsmap = {'*': True, 'False': False}
@@ -53,7 +53,7 @@ class GameLog:
 
         return dframe
 
-    def gamelog_passing(self, player_link, year, **kwargs):
+    def passing(self, player_link, year, **kwargs):
         # Set up the gamelog suffix
         gamelog_suffix = '/gamelog/%s/' % year
 
@@ -131,7 +131,7 @@ class GameLog:
 
         return df
 
-    def gamelog_receiving(self, player_link, year, **kwargs):
+    def receiving(self, player_link, year, **kwargs):
         # Set up the gamelog suffix
         gamelog_suffix = '/gamelog/%s/' % year
 
