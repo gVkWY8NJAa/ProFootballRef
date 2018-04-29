@@ -1,15 +1,17 @@
+
 [![Build Status](https://travis-ci.org/gVkWY8NJAa/ProFootballRef.svg?branch=master)](https://travis-ci.org/gVkWY8NJAa/ProFootballRef)
 # ProFootballRef
 
-This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame. The toolkit is highly modular such that you are free to use various components as you see fit.
+This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame.
 
 Please consider contributing the $20/yr to support the site, they do a great job: https://www.pro-football-reference.com/my/?do=ad_free_browsing
 
 ## Key Features
 * Aggregate player data for each season.
 * Ability to combine qualitative (height/weight) with quantitative (TDs).
-* Multi column headers have been simplified and closely match the canonical source.
+* Multi column headers have been simplified and closly match the canonical source.
 * Scrape team stats for a given season.
+* Player gamelog data available for a given season.
 * Returned objects are Pandas DataFrames for ease of analysis.
 
 ## Installation
@@ -30,14 +32,11 @@ python3.6 -m pytest tests/
 
 ```python
 # Individual player statistics for passing
-from ProFootballRef.LinkBuilder import GetPositionLinks 
+from ProFootballRef.LinkBuilder import GetPositionLinks
 from ProFootballRef.Parsers import PlayerParser
 
-links = GetPositionLinks.GetPositionLinks('passing').parse_links(2017)
-html = PlayerParser.PlayerParser().load_page(links[:1][0])
-general_stats = PlayerParser.PlayerParser().parse_general_info(html)
-
-passing_df = PlayerParser.PlayerParser().parse_passing_stats(general_stats, html)
+links = GetPositionLinks.GetPositionLinks('passing').player_links(2017)
+passing_df = PlayerParser.PlayerParser().passing(links[:1][0])
 ```
 
 
@@ -215,19 +214,19 @@ Individual player metrics are gathered using a five step process to allow you gr
 
 
 ```python
-from ProFootballRef.LinkBuilder import GetPositionLinks 
+from ProFootballRef.LinkBuilder import GetPositionLinks
 from ProFootballRef.Parsers import PlayerParser
 ```
 
 First we need to generate pages to scrape based on position. This is a two step process.
 1. Pass a position to the **GetPositionLinks()** class: passing, receiving, rushing, kicking, or defense. This tells the class which url it needs to request.
-2. Pass a season (year) to the **parse_links()** function to get the players of the corresponding position who played during the season.
+2. Pass a season (year) to the **player_links()** function to get the players of the corresponding position who played during the season.
 
 
 ```python
 position = 'passing'
 season = 2017
-links = GetPositionLinks.GetPositionLinks(position).parse_links(season)
+links = GetPositionLinks.GetPositionLinks(position).player_links(season)
 ```
 
 As you can see below, a list of urls is returned for each player of the position, and season, that was requested.
@@ -248,70 +247,25 @@ links[:5]
 
 
 
-Next, We call the **PlayerParser** class method, **load_page()**, to return an html object for parsing. For this example we will only parse one link from the list above.
-
-
-```python
-links[:1][0]
-```
-
-
-
-
-    'https://www.pro-football-reference.com/players/B/BradTo00.htm'
-
-
-
-
-```python
-html = PlayerParser.PlayerParser().load_page(links[:1][0])
-```
-
-Each player has qualitative information such as height, weight, date of birth etc. so we will grab that by passing our html object to the **parse_general_info()** method which will return a dict of the info:
-
-
-```python
-general_stats = PlayerParser.PlayerParser().parse_general_info(html)
-```
-
-
-```python
-general_stats
-```
-
-
-
-
-    {'bday_day': 3,
-     'bday_mo': 8,
-     'bday_yr': 1977,
-     'college': 'Michigan',
-     'height': 76,
-     'name': 'Tom Brady',
-     'throws': 'Right',
-     'weight': 225}
-
-
-
-Then, we will call the parser specific to the position, and pass to it the general_stats dict in the last step, as well as our html object from before. 
+Then, we will call the parser specific to the position, and pass to it a url that we wish to scrape.
 
 You can choose from:
 
-**parse_receiver_stats()**
+**receiving()**
 
-**parse_rushing_stats()**
+**rushing()**
 
-**parse_passisng_stats()**
+**passing()**
 
-**parse_defense_stats()**
+**defense()**
 
-**parse_kicking_stats()**
+**kicking()**
 
 Each of these parsers will return a Pandas DataFrame object.
 
 
 ```python
-df = PlayerParser.PlayerParser().parse_passing_stats(general_stats, html)
+df = PlayerParser.PlayerParser().passing(links[:1][0])
 ```
 
 
@@ -484,7 +438,7 @@ df.head()
 
 ```python
 import pandas as pd
-from ProFootballRef.LinkBuilder import GetPositionLinks 
+from ProFootballRef.LinkBuilder import GetPositionLinks
 from ProFootballRef.Parsers import PlayerParser
 
 # Initialize an empty DataFrame to store all the players
@@ -495,22 +449,16 @@ position = 'passing'
 season = 2017
 
 # Generate a list of urls for the players in that season
-links = GetPositionLinks.GetPositionLinks(position).parse_links(season)
+links = GetPositionLinks.GetPositionLinks(position).player_links(season)
 
 # We will scrape the first 5 players in the list of links
 for player in links[:5]:
-    
-    # load the page and return the html
-    html = PlayerParser.PlayerParser().load_page(player)
-    
-    # scrape height and weight info
-    general_stats = PlayerParser.PlayerParser().parse_general_info(html)
-    
-    # pass that to the position parser
-    stats = PlayerParser.PlayerParser().parse_passing_stats(general_stats, html)
-    
+
+    # pass the url to the position parser
+    stats = PlayerParser.PlayerParser().passing(player)
+
     # concat the results with our catch all dataframe
-    all_qb = pd.concat([all_qb, stats], axis=0)   
+    all_qb = pd.concat([all_qb, stats], axis=0)
 ```
 
 
@@ -648,16 +596,16 @@ all_qb.groupby(['Name']).sum()
     </tr>
     <tr>
       <th>Philip Rivers</th>
-      <td>28147</td>
-      <td>413.0</td>
-      <td>1078</td>
-      <td>3192</td>
-      <td>168</td>
-      <td>112</td>
-      <td>27734</td>
-      <td>238</td>
-      <td>196</td>
-      <td>4171</td>
+      <td>24138</td>
+      <td>366.0</td>
+      <td>924</td>
+      <td>2736</td>
+      <td>144</td>
+      <td>96</td>
+      <td>23772</td>
+      <td>204</td>
+      <td>192</td>
+      <td>4154</td>
       <td>...</td>
       <td>0.0</td>
       <td>-9.0</td>
@@ -666,9 +614,9 @@ all_qb.groupby(['Name']).sum()
       <td>-9.0</td>
       <td>0.0</td>
       <td>-0.6</td>
-      <td>564</td>
+      <td>570</td>
       <td>3</td>
-      <td>99.0</td>
+      <td>96.0</td>
     </tr>
     <tr>
       <th>Tom Brady</th>
@@ -708,7 +656,7 @@ If you need to get players from multiple seasons, it is easiest to make a pruned
 ```python
 big_list = []
 for year in range(2015,2017):
-    big_list = big_list + GetPositionLinks.GetPositionLinks('passing').parse_links(year)
+    big_list = big_list + GetPositionLinks.GetPositionLinks('passing').player_links(year)
 ```
 
 
@@ -742,13 +690,11 @@ len(pruned_list)
 
 
 
-You would then simply iterate through this list and call:
+You would then simply iterate through the "pruned_list" and call:
 ```python
-load_page(url)
-parse_general_info(html)
-parse_passing_stats(general_stats, html)
-``` 
-The result would be a DataFrame of 129 different passing players. 
+PlayerParser.PlayerParser().passing(url)
+```
+The result would be a DataFrame of 129 different passing players.
 
 **Again, this will generate a ton of traffic to the website so use caution.**
 
@@ -1101,5 +1047,3 @@ df.head()
 </table>
 <p>5 rows × 27 columns</p>
 </div>
-
-

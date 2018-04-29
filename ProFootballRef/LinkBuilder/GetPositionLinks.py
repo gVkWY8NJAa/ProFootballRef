@@ -1,5 +1,5 @@
-import requests
 import re
+from ProFootballRef.Tools import Loader
 
 
 class GetPositionLinks:
@@ -19,13 +19,10 @@ class GetPositionLinks:
             print('Must pass either receiving, rushing, passing, defense, or kicking')
             return 0
 
-    def parse_links(self, year):
+    def player_links(self, year):
         # load the positions page for the given year
         url = self.url % year
-        page = requests.get(url, headers={
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) '
-                          'Chrome/51.0.2704.103 Safari/537.36'})
-        content = page.content.decode()
+        content = Loader.Loader().load_page(url).content.decode()
 
         # Parse urls from the position page that point to the individuals players page
         players = re.compile(

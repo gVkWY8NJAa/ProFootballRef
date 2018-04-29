@@ -17,7 +17,7 @@ class TeamStats:
 
         df = pd.read_html(comment)[0]
 
-        # drop a nunch of unused columns
+        # drop a bunch of unused columns
         df = df.iloc[:, 1:28]
 
         # Rename columns
@@ -38,7 +38,7 @@ class TeamStats:
     def defense(self, year):
         defense = pd.read_html('https://www.pro-football-reference.com/years/%s/opp.htm' % (year))[0]
 
-        # drop rk and multiple unuse cols
+        # drop rk and multiple unused cols
         defense = defense.iloc[:, 1:28]
 
         # rename cols

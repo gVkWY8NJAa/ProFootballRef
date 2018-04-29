@@ -1,20 +1,12 @@
-import requests
 import re
 import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup, Comment
+from ProFootballRef.Tools import Loader
 
 class PlayerParser:
     def __init__(self):
         pass
-
-    def load_page(self, url):
-        # load and return the html which will hit various parsers, each with their own purpose
-        page = requests.get(url, headers={
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) '
-                          'Chrome/51.0.2704.103 Safari/537.36'})
-        html = page.content.decode()
-        return html
 
     def parse_general_info(self, html):
 
@@ -23,6 +15,8 @@ class PlayerParser:
 
         # scrape data off the players page not contained in the stats table
         general_stats['name'] = re.compile('<h1 itemprop="name">(.*?)\s*<\/h1>').findall(html)[0]
+
+        general_stats['position'] = re.compile('<strong>Position<\/strong>:\W([a-zA-Z]{1,})').findall(html)[0]
 
         try:
             general_stats['throws'] = re.compile('<strong>Throws:<\/strong>\\n\\t\\t(.*?)\\n\\t\\n<\/p>').findall(html)[0]
@@ -48,7 +42,18 @@ class PlayerParser:
 
         return general_stats
 
-    def parse_receiver_stats(self, general_stats, html):
+    def receiving(self, url=None, **kwargs):
+        # We generally pass in a url and then load the page, for testing the function allow html to be passed in
+        if url:
+            response = Loader.Loader().load_page(url)
+            html = response.content.decode()
+        else:
+            for k, v in kwargs.items():
+                if k == 'html':
+                    html = v
+
+        #Scrape general stats
+        general_stats = self.parse_general_info(html)
 
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
@@ -90,15 +95,29 @@ class PlayerParser:
         df['DOB_yr'] = general_stats['bday_yr']
         df['College'] = general_stats['college']
 
+        # This is hacky but position info isn't always contained in every row
+        if df['Pos'].isnull().values.any():
+            df['Pos'] = general_stats['position']
+
         # rearange the dataframe columns, this is personal preference
-        df = df[
-            ['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College', 'Tm', 'Pos',
-             'No', 'G', 'GS', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng', 'R/G', 'Rec_Y/G', 'Ctch%', 'Rush',
+        df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College',
+                 'Tm', 'Pos', 'No', 'G', 'GS', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng', 'R/G', 'Rec_Y/G', 'Ctch%', 'Rush',
              'Rush_Yds', 'Rush_TD', 'Rush_Lng', 'Y/A', 'Rush_Y/G', 'A/G', 'YScm', 'RRTD', 'Fmb', 'AV']]
 
         return df
 
-    def parse_rushing_stats(self, general_stats, html):
+    def rushing(self, url=None, **kwargs):
+        # We generally pass in a url and then load the page, for testing the function allow html to be passed in
+        if url:
+            response = Loader.Loader().load_page(url)
+            html = response.content.decode()
+        else:
+            for k, v in kwargs.items():
+                if k == 'html':
+                    html = v
+
+        # Scrape general stats
+        general_stats = self.parse_general_info(html)
 
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
@@ -143,6 +162,10 @@ class PlayerParser:
         df['DOB_yr'] = general_stats['bday_yr']
         df['College'] = general_stats['college']
 
+        # This is hacky but position info isn't always contained in every row
+        if df['Pos'].isnull().values.any():
+            df['Pos'] = general_stats['position']
+
         # rearange the dataframe columns, this is personal preference
         df = df[
             ['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College', 'Tm', 'Pos',
@@ -151,7 +174,18 @@ class PlayerParser:
 
         return df
 
-    def parse_passing_stats(self, general_stats, html):
+    def passing(self, url=None, **kwargs):
+        # We generally pass in a url and then load the page, for testing the function allow html to be passed in
+        if url:
+            response = Loader.Loader().load_page(url)
+            html = response.content.decode()
+        else:
+            for k,v in kwargs.items():
+                if k == 'html':
+                    html = v
+
+        # Scrape general stats
+        general_stats = self.parse_general_info(html)
 
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
@@ -188,13 +222,18 @@ class PlayerParser:
         df['DOB_yr'] = general_stats['bday_yr']
         df['College'] = general_stats['college']
 
+        # This is hacky but position info isn't always contained in every row
+        if df['Pos'].isnull().values.any():
+            df['Pos'] = general_stats['position']
+
+
         # rearange the dataframe columns, this is personal preference
         df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College',
                  'Tm', 'Pos', 'No.', 'G', 'GS', 'QBrec', 'Cmp', 'Att', 'Cmp%', 'Yds', 'TD', 'TD%', 'Int', 'Int%',
                  'Lng', 'Pass_Y/A', 'AY/A', 'Y/C', 'Y/G', 'Rate', 'QBR', 'Sk', 'Sk_Yds', 'NY/A', 'ANY/A', 'Sk%', '4QC',
                  'GWD', 'AV']]
 
-        # Parse out rushing and receiving information and append to the pssing info
+        # Parse out rushing and receiving information and append to the passing info
         soup = BeautifulSoup(html, 'lxml')
 
         # parse out the chunk of rushing and receiving info from the html comments
@@ -211,7 +250,7 @@ class PlayerParser:
 
         rush_df.columns = new_cols
 
-        ##munge the columns similar to above
+        # munge the columns similar to above
         # remove the career totals row
         rush_df = rush_df[rush_df.Year != 'Career']
 
@@ -231,12 +270,23 @@ class PlayerParser:
         # merging on GS breaks for some reason so drop the col
         rush_df = rush_df.drop(['GS'], axis=1)
 
-        # merge the two DataFrames on overlaping columns and return
+        # merge the two DataFrames on overlapping columns and return
         combined_df = pd.merge(df, rush_df, on=['Year', 'Age', 'No.', 'G', 'Pos', 'Tm'])
 
         return combined_df
 
-    def parse_defense_stats(self, general_stats, html):
+    def defense(self, url=None, **kwargs):
+        # We generally pass in a url and then load the page, for testing the function allow html to be passed in
+        if url:
+            response = Loader.Loader().load_page(url)
+            html = response.content.decode()
+        else:
+            for k, v in kwargs.items():
+                if k == 'html':
+                    html = v
+
+        # Scrape general stats
+        general_stats = self.parse_general_info(html)
 
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
@@ -275,13 +325,28 @@ class PlayerParser:
         df['DOB_yr'] = general_stats['bday_yr']
         df['College'] = general_stats['college']
 
+        # This is hacky but position info isn't always contained in every row
+        if df['Pos'].isnull().values.any():
+            df['Pos'] = general_stats['position']
+
         df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College', 'Tm',
                  'Pos', 'No.', 'G', 'GS', 'Int', 'Yds', 'TD', 'Lng', 'PD', 'FF', 'Fmb', 'FR', 'Fmb_Yds', 'Fmb_TD',
                  'Sk', 'Tkl', 'Ast', 'Sfty', 'AV']]
 
         return df
 
-    def parse_kicking_stats(self, general_stats, html):
+    def kicking(self, url=None, **kwargs):
+        # We generally pass in a url and then load the page, for testing the function allow html to be passed in
+        if url:
+            response = Loader.Loader().load_page(url)
+            html = response.content.decode()
+        else:
+            for k, v in kwargs.items():
+                if k == 'html':
+                    html = v
+
+        # Scrape general stats
+        general_stats = self.parse_general_info(html)
 
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
@@ -289,7 +354,7 @@ class PlayerParser:
         # sometimes there's unneeded cols
         df = df.iloc[:, :30]
 
-        # rename columns from origional multirow colums
+        # rename columns from original multirow colums
         cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', '0-19FGA', '0-19FGM', '20-29FGA', '20-29FGM', '30-39FGA',
                 '30-39FGM', '40-49FGA', '40-49FGM', '50+FGA', '50+FGM', 'scr_FGA', 'scr_FGM', 'Lng', 'scr_FG%',
                 'scr_XPA', 'scr_XPM', 'scr_XP%', 'Pnt', 'Yds', 'Lng', 'Blck', 'Y/P', 'AV']
@@ -322,6 +387,10 @@ class PlayerParser:
         df['DOB_day'] = general_stats['bday_day']
         df['DOB_yr'] = general_stats['bday_yr']
         df['College'] = general_stats['college']
+
+        # This is hacky but position info isn't always contained in every row
+        if df['Pos'].isnull().values.any():
+            df['Pos'] = general_stats['position']
 
         df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College', 'Tm',
                  'Pos', 'No.', 'G', 'GS', '0-19FGA', '0-19FGM', '20-29FGA', '20-29FGM', '30-39FGA', '30-39FGM',

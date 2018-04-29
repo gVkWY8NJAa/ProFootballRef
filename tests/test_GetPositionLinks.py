@@ -4,32 +4,30 @@ from ProFootballRef.LinkBuilder import GetPositionLinks
 
 @pytest.fixture(scope="class")
 def receiving():
-    return GetPositionLinks.GetPositionLinks('receiving').parse_links('2017')
+    return GetPositionLinks.GetPositionLinks('receiving').player_links('2017')
 
 
 @pytest.fixture(scope="class")
 def rushing():
-    return GetPositionLinks.GetPositionLinks('rushing').parse_links('2017')
+    return GetPositionLinks.GetPositionLinks('rushing').player_links('2017')
 
 
 @pytest.fixture(scope="class")
 def passing():
-    return GetPositionLinks.GetPositionLinks('passing').parse_links('2017')
+    return GetPositionLinks.GetPositionLinks('passing').player_links('2017')
 
 
 @pytest.fixture(scope="class")
 def defense():
-    return GetPositionLinks.GetPositionLinks('defense').parse_links('2017')
+    return GetPositionLinks.GetPositionLinks('defense').player_links('2017')
 
 
 @pytest.fixture(scope="class")
 def kicking():
-    return GetPositionLinks.GetPositionLinks('kicking').parse_links('2017')
+    return GetPositionLinks.GetPositionLinks('kicking').player_links('2017')
 
 
 class TestReceiving:
-
-
     def test_receiving_type(self, receiving):
         assert type(receiving) == list
 
@@ -41,7 +39,6 @@ class TestReceiving:
 
 
 class TestRushing:
-
     def test_rushing_type(self, rushing):
         assert type(rushing) == list
 
@@ -72,6 +69,7 @@ class TestDefense:
 
     def test_defense_value(self, defense):
         assert 'https://www.pro-football-reference.com/players/O/OnwuPa00.htm' in defense
+
 
 class TestKicking:
     def test_kicking_type(self, kicking):
