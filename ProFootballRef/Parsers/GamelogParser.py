@@ -12,18 +12,7 @@ pd.set_option('display.max_columns', None)
 
 class GameLog:
     def __init__(self):
-        # Combinations of header labels
-        self.base = ['Rk', 'Date', 'G#', 'Age', 'Tm', 'Home', 'Opp', 'Result']
-        self.receiving = ['Rec_Tgt', 'Rec_Rec', 'Rec_Yds', 'Rec_Y/R', 'Rec_TD', 'Rec_Ctch%', 'Rec_Y/Tgt']
-        self.rushing = ['rush_att', 'rush_yds', 'rush_Y/A', 'rush_TD']
-        self.passing = ['pass_cmp', 'pass_att', 'Cmp%', 'pass_yds', 'pass_td', 'Int', 'Rate', 'Sk', 'Sk-Yds',
-                        'pass_Y/A', 'AY/A']
-        self.rush_sk = ['rush_sk', 'tkl', 'Ast']
-        self.scoring2p = ['2pt']
-        self.scoring = ['Any_TD', 'Any_Pts']
-        self.punting = ['Pnt', 'Pnt_Yds', 'Y/P', 'Blck']
-        self.kick_rt = ['Kick_Rt', 'Kick_RtYds', 'Y/Rt', 'Kick_TD']
-        self.punt_rt = ['Pnt_rt', 'Pnt_Yds', 'Y/Pnt', 'Pnt_TD']
+        pass
 
     def common(self, dframe, year):
 
@@ -135,9 +124,10 @@ class GameLog:
         df['DOB_yr'] = gen['bday_yr']
         df['College'] = gen['college']
 
-        df = df[['Name', 'Pos', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College'] + self.base[1:] + ['GS'] +
-                ['PF', 'PA'] + self.passing + self.rushing + self.receiving + self.rush_sk + self.scoring2p +
-                self.scoring + self.punting]
+        df = df[['Name', 'Pos', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College'] +
+                Passhash.PassHash().base[1:] + ['GS'] + ['PF', 'PA'] + Passhash.PassHash().passing +
+                Passhash.PassHash().rushing + Passhash.PassHash().receiving + Passhash.PassHash().rush_sk +
+                Passhash.PassHash().scoring2p + Passhash.PassHash().scoring + Passhash.PassHash().punting]
 
         return df
 
@@ -220,7 +210,8 @@ class GameLog:
         df['College'] = gen['college']
 
         df = df[['Name', 'Pos', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College'] +
-                self.base[1:] + ['PF', 'PA'] + self.receiving + self.rushing + self.kick_rt + self.punt_rt +
-                self.scoring2p + self.scoring]
+                Rechash.RecHash().base[1:] + ['PF', 'PA'] + Rechash.RecHash().receiving + Rechash.RecHash().rushing +
+                Rechash.RecHash().kick_rt + Rechash.RecHash().punt_rt + Rechash.RecHash().scoring2p +
+                Rechash.RecHash().scoring]
 
         return df
