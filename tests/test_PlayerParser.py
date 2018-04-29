@@ -40,12 +40,12 @@ class TestPassing:
     # test to see if the dataframe is coming back correctly
     def test_df_name(self, passing_req):
         html = passing_req.content.decode()
-        df = PlayerParser.PlayerParser().parse_passing_stats(html=html)
+        df = PlayerParser.PlayerParser().passing(html=html)
         assert df.iloc[0]['Name'] == 'Tom Brady'
 
     def test_df_pos(self, passing_req):
         html = passing_req.content.decode()
-        df = PlayerParser.PlayerParser().parse_passing_stats(html=html)
+        df = PlayerParser.PlayerParser().passing(html=html)
         assert df.iloc[0]['Pos'] == 'QB'
 
 class TestReceiving:
@@ -53,12 +53,12 @@ class TestReceiving:
     # test to see if the dataframe is coming back correctly
     def test_df_name(self, receiving_req):
         html = receiving_req.content.decode()
-        df = PlayerParser.PlayerParser().parse_receiver_stats(html=html)
+        df = PlayerParser.PlayerParser().receiving(html=html)
         assert df.iloc[0]['Name'] == 'Antonio Brown'
 
     def test_df_pos(self, receiving_req):
         html = receiving_req.content.decode()
-        df = PlayerParser.PlayerParser().parse_receiver_stats(html=html)
+        df = PlayerParser.PlayerParser().receiving(html=html)
         assert df.iloc[0]['Pos'] == 'WR'
 
 
@@ -67,7 +67,7 @@ class TestRushing:
     # test to see if the dataframe is coming back correctly
     def test_df_name(self, rushing_req):
         html = rushing_req.content.decode()
-        df = PlayerParser.PlayerParser().parse_rushing_stats(html=html)
+        df = PlayerParser.PlayerParser().rushing(html=html)
         assert df.iloc[0]['Name'] == "Le'Veon Bell"
 
 
@@ -76,7 +76,7 @@ class TestKicking:
     # test to see if the dataframe is coming back correctly
     def test_df_name(self, kicking_req):
         html = kicking_req.content.decode()
-        df = PlayerParser.PlayerParser().parse_kicking_stats(html=html)
+        df = PlayerParser.PlayerParser().kicking(html=html)
         assert df.iloc[0]['Name'] == 'Greg Zuerlein'
 
 
@@ -85,5 +85,5 @@ class TestDefense:
     # test to see if the dataframe is coming back correctly
     def test_df_name(self, defense_req):
         html = defense_req.content.decode()
-        df = PlayerParser.PlayerParser().parse_defense_stats(html=html)
+        df = PlayerParser.PlayerParser().defense(html=html)
         assert df.iloc[0]['Name'] == 'Demario Davis'
