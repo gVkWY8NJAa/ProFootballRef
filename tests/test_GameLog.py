@@ -15,3 +15,9 @@ class TestGamelogPassing:
         df = GamelogParser.GameLog().gamelog_passing(urls['passing'], 2001)
         assert df['pass_yds'].sum() == 2843
 
+
+class TestGamelogReceiving:
+
+    def test_brown_2013(self):
+        df = GamelogParser.GameLog().gamelog_receiving(urls['receiving'], 2013)
+        assert df['Rec_TD'].sum() == 8

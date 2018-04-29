@@ -5,6 +5,7 @@ import json
 from ProFootballRef.Parsers import PlayerParser
 from ProFootballRef.Tools import Loader
 from ProFootballRef.Tools import Passhash
+from ProFootballRef.Tools import Rechash
 
 pd.set_option('display.max_columns', None)
 
@@ -12,17 +13,20 @@ pd.set_option('display.max_columns', None)
 class GameLog:
     def __init__(self):
         # Combinations of header labels
-        self.base = ['Rk', 'Date', 'G#', 'Age', 'Tm', 'Home', 'Opp', 'Result', 'GS']
+        self.base = ['Rk', 'Date', 'G#', 'Age', 'Tm', 'Home', 'Opp', 'Result']
+        self.receiving = ['Rec_Tgt', 'Rec_Rec', 'Rec_Yds', 'Rec_Y/R', 'Rec_TD', 'Rec_Ctch%', 'Rec_Y/Tgt']
+        self.rushing = ['rush_att', 'rush_yds', 'rush_Y/A', 'rush_TD']
         self.passing = ['pass_cmp', 'pass_att', 'Cmp%', 'pass_yds', 'pass_td', 'Int', 'Rate', 'Sk', 'Sk-Yds',
                         'pass_Y/A', 'AY/A']
-        self.rushing = ['rush_att', 'rush_yds', 'rush_Y/A', 'rush_TD']
         self.rush_sk = ['rush_sk', 'tkl', 'Ast']
-        self.receiving = ['Rec_Tgt', 'Rec_Rec', 'Rec_Yds', 'Rec_Y/R', 'Rec_TD', 'Rec_Ctch%', 'Rec_Y/Tgt']
-        self.scoring2p = ['2pm']
+        self.scoring2p = ['2pt']
         self.scoring = ['Any_TD', 'Any_Pts']
         self.punting = ['Pnt', 'Pnt_Yds', 'Y/P', 'Blck']
+        self.kick_rt = ['Kick_Rt', 'Kick_RtYds', 'Y/Rt', 'Kick_TD']
+        self.punt_rt = ['Pnt_rt', 'Pnt_Yds', 'Y/Pnt', 'Pnt_TD']
 
     def common(self, dframe, year):
+
         # Drop rk col
         dframe.drop(['Rk'], axis=1, inplace=True)
 
@@ -35,9 +39,10 @@ class GameLog:
         dframe.loc[:, 'Home'] = dframe.loc[:, 'Home'].map(homemap)
 
         # map home game started
-        dframe.loc[:, 'GS'] = dframe.loc[:, 'GS'].fillna('False')
-        gsmap = {'*': True, 'False': False}
-        dframe.loc[:, 'GS'] = dframe.loc[:, 'GS'].map(gsmap)
+        if 'GS' in dframe.columns:
+            dframe.loc[:, 'GS'] = dframe.loc[:, 'GS'].fillna('False')
+            gsmap = {'*': True, 'False': False}
+            dframe.loc[:, 'GS'] = dframe.loc[:, 'GS'].map(gsmap)
 
         # Recalculate age. profootball ref gives Age in year and days so we'll turn that into a float
         if calendar.isleap(year):
@@ -45,11 +50,11 @@ class GameLog:
         else:
             days = 365
 
-        Age = dframe.loc[:, 'Age'].str.split('-', expand=True)
-        Age[0] = pd.to_numeric(Age[0])
-        Age[1] = pd.to_numeric(Age[1])
+        age = dframe.loc[:, 'Age'].str.split('-', expand=True)
+        age[0] = pd.to_numeric(age[0])
+        age[1] = pd.to_numeric(age[1])
 
-        dframe.loc[:, 'Age'] = Age[1] / days + Age[0]
+        dframe.loc[:, 'Age'] = age[1] / days + age[0]
 
         # Split wins and loses w/ points for (PF) and points againat (PA)
         rec = dframe.loc[:, 'Result'].str.split(' ', expand=True)
@@ -75,6 +80,7 @@ class GameLog:
         # parse tables w pandas
         df = pd.read_html(html)[0]
 
+        # make a hash of the column names to tell which values exist
         which_cols = hashlib.md5(json.dumps(list(df.columns.levels[0])).encode()).hexdigest()
 
         if which_cols == "64b4c5df667e588d59b856ae9d724c7d":
@@ -129,8 +135,92 @@ class GameLog:
         df['DOB_yr'] = gen['bday_yr']
         df['College'] = gen['college']
 
-        df = df[['Name','Pos', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College'] + self.base[1:] +
+        df = df[['Name', 'Pos', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College'] + self.base[1:] + ['GS'] +
                 ['PF', 'PA'] + self.passing + self.rushing + self.receiving + self.rush_sk + self.scoring2p +
                 self.scoring + self.punting]
+
+        return df
+
+    def gamelog_receiving(self, player_link, year, **kwargs):
+        # Set up the gamelog suffix
+        gamelog_suffix = '/gamelog/%s/' % year
+
+        # Modify the player url to point to the gamelog
+        log_url = player_link[:-4] + gamelog_suffix
+
+        # Get html
+        html = Loader.Loader().load_page(log_url).content.decode()
+
+        # ************** generate general stats, these need to be combined later ******************
+        gen = PlayerParser.PlayerParser().parse_general_info(html)
+
+        # parse tables w pandas
+        df = pd.read_html(html)[0]
+
+        # hash the columns to determine which fields are being used
+        which_cols = hashlib.md5(json.dumps(list(df.columns.levels[0])).encode()).hexdigest()
+
+        if which_cols == "b3c4237d9a10de8cfaad61852cb552c4":
+            df = Rechash.RecHash().md5b3c4237d9a10de8cfaad61852cb552c4(df)
+
+        elif which_cols == "bcb96297b50fb2120f475e8e05fbabcd":
+            df = Rechash.RecHash().md5bcb96297b50fb2120f475e8e05fbabcd(df)
+
+        elif which_cols == "4560c290b45e942c16cc6d7811345fce":
+            df = Rechash.RecHash().md54560c290b45e942c16cc6d7811345fce(df)
+
+        elif which_cols == "4c82a489ec5b2c943e78c9018dcbbca1":
+            df = Rechash.RecHash().md54c82a489ec5b2c943e78c9018dcbbca1(df)
+
+        elif which_cols == "e8ffc7202223bb253e92da83b76e9944":
+            df = Rechash.RecHash().md5e8ffc7202223bb253e92da83b76e9944(df)
+
+        elif which_cols == "50fcceaa170b1a1e501e3f40548e403d":
+            df = Rechash.RecHash().md550fcceaa170b1a1e501e3f40548e403d(df)
+
+        elif which_cols == "e160e714b29305ecfecf513cbf84b80f":
+            df = Rechash.RecHash().md5e160e714b29305ecfecf513cbf84b80f(df)
+
+        elif which_cols == "111e8480632f73642d7e20acbdbe6b16":
+            df = Rechash.RecHash().md5111e8480632f73642d7e20acbdbe6b16(df)
+
+        elif which_cols == "adc05c5af0f88775d3605d02c831c0ed":
+            df = Rechash.RecHash().md5adc05c5af0f88775d3605d02c831c0ed(df)
+
+        elif which_cols == "bfbf86ae0485a0a70692ae04124449b9":
+            df = Rechash.RecHash().md5bfbf86ae0485a0a70692ae04124449b9(df)
+
+        elif which_cols == "6b4698269dd34a823cf6b233c6165614":
+            df = Rechash.RecHash().md56b4698269dd34a823cf6b233c6165614(df)
+
+        elif which_cols == "7f97f3885d50fcf9b92797810856a89f":
+            df = Rechash.RecHash().md57f97f3885d50fcf9b92797810856a89f(df)
+
+        elif which_cols == "aa321161d6f3f5230259dbc4ae67299a":
+            df = Rechash.RecHash().md5aa321161d6f3f5230259dbc4ae67299a(df)
+
+        elif which_cols == "1193d47266d4acdcf1b6fca165121100":
+            df = Rechash.RecHash().md51193d47266d4acdcf1b6fca165121100(df)
+
+        # send df to the common parser
+        df = self.common(df, year)
+
+        # Add the name
+        df.loc[:, 'Name'] = gen['name']
+
+        # Add the players position
+        df.loc[:, 'Pos'] = gen['position']
+
+        df['Throws'] = gen['throws']
+        df['Height'] = gen['height']
+        df['Weight'] = gen['weight']
+        df['DOB_mo'] = gen['bday_mo']
+        df['DOB_day'] = gen['bday_day']
+        df['DOB_yr'] = gen['bday_yr']
+        df['College'] = gen['college']
+
+        df = df[['Name', 'Pos', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College'] +
+                self.base[1:] + ['PF', 'PA'] + self.receiving + self.rushing + self.kick_rt + self.punt_rt +
+                self.scoring2p + self.scoring]
 
         return df

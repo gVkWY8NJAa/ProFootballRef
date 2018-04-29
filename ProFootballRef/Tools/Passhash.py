@@ -10,7 +10,7 @@ class PassHash:
         self.rushing = ['rush_att', 'rush_yds', 'rush_Y/A', 'rush_TD']
         self.rush_sk = ['rush_sk', 'tkl', 'Ast']
         self.receiving = ['Rec_Tgt', 'Rec_Rec', 'Rec_Yds', 'Rec_Y/R', 'Rec_TD', 'Rec_Ctch%', 'Rec_Y/Tgt']
-        self.scoring2p = ['2pm']
+        self.scoring2p = ['2pt']
         self.scoring = ['Any_TD', 'Any_Pts']
         self.punting = ['Pnt', 'Pnt_Yds', 'Y/P', 'Blck']
 
@@ -21,7 +21,8 @@ class PassHash:
         df.columns = cols
 
         # add missing cols
-        df = pd.concat([df, pd.DataFrame(columns=self.rushing + self.receiving + self.rush_sk + self.scoring2p + self.scoring + self.punting)],axis=1)
+        df = pd.concat([df, pd.DataFrame(columns=self.rushing + self.receiving + self.rush_sk + self.scoring2p +
+                                                 self.scoring + self.punting)],axis=1)
         
         # set all the new columns to zero
         df.loc[:, self.rushing + self.receiving + self.rush_sk + self.scoring2p + self.scoring + self.punting] = 0

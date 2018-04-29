@@ -233,7 +233,7 @@ class PlayerParser:
                  'Lng', 'Pass_Y/A', 'AY/A', 'Y/C', 'Y/G', 'Rate', 'QBR', 'Sk', 'Sk_Yds', 'NY/A', 'ANY/A', 'Sk%', '4QC',
                  'GWD', 'AV']]
 
-        # Parse out rushing and receiving information and append to the pssing info
+        # Parse out rushing and receiving information and append to the passing info
         soup = BeautifulSoup(html, 'lxml')
 
         # parse out the chunk of rushing and receiving info from the html comments
@@ -270,7 +270,7 @@ class PlayerParser:
         # merging on GS breaks for some reason so drop the col
         rush_df = rush_df.drop(['GS'], axis=1)
 
-        # merge the two DataFrames on overlaping columns and return
+        # merge the two DataFrames on overlapping columns and return
         combined_df = pd.merge(df, rush_df, on=['Year', 'Age', 'No.', 'G', 'Pos', 'Tm'])
 
         return combined_df
@@ -354,7 +354,7 @@ class PlayerParser:
         # sometimes there's unneeded cols
         df = df.iloc[:, :30]
 
-        # rename columns from origional multirow colums
+        # rename columns from original multirow colums
         cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', '0-19FGA', '0-19FGM', '20-29FGA', '20-29FGM', '30-39FGA',
                 '30-39FGM', '40-49FGA', '40-49FGM', '50+FGA', '50+FGM', 'scr_FGA', 'scr_FGM', 'Lng', 'scr_FG%',
                 'scr_XPA', 'scr_XPM', 'scr_XP%', 'Pnt', 'Yds', 'Lng', 'Blck', 'Y/P', 'AV']
