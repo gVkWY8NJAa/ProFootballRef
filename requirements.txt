@@ -2,6 +2,7 @@ beautifulsoup4
 html5lib
 lxml
 pandas
+numpy
 requests
 urllib3
 pytest
