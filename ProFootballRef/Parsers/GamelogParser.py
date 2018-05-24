@@ -40,7 +40,8 @@ class GameLog:
         else:
             days = 365
 
-        age = dframe.loc[:, 'Age'].str.split('-', expand=True)
+        dframe.loc[:, 'Age'] = dframe.loc[:, 'Age'].astype(str)
+        age = dframe.loc[:, 'Age'].str.split('.', expand=True)
         age[0] = pd.to_numeric(age[0])
         age[1] = pd.to_numeric(age[1])
 
