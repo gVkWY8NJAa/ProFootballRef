@@ -18,7 +18,7 @@ class GameLog:
     def common(self, dframe, year):
 
         # Drop rk col
-        dframe.drop(['Rk'], axis=1, inplace=True)
+        dframe = dframe.drop(['Rk'], axis=1)
 
         # drop summary line
         dframe = dframe.loc[pd.notnull(dframe.loc[:, 'G#'])]
@@ -86,7 +86,9 @@ class GameLog:
                     "c34721f06f1a5aad95fab7fc16577538": Passhash.PassHash().md5c34721f06f1a5aad95fab7fc16577538,
                     "afa7cf6859400c6023d114abc175c24d": Passhash.PassHash().md5afa7cf6859400c6023d114abc175c24d,
                     "2451894bb088c27b0a02ad350e35b9ad": Passhash.PassHash().md52451894bb088c27b0a02ad350e35b9ad,
-                    "e22db471405382c6d4e868c4d29d9cb5": Passhash.PassHash().md5e22db471405382c6d4e868c4d29d9cb5}
+                    "e22db471405382c6d4e868c4d29d9cb5": Passhash.PassHash().md5e22db471405382c6d4e868c4d29d9cb5,
+                    "60befa83b7115d584e02dea9908a707d": Passhash.PassHash().md560befa83b7115d584e02dea9908a707d}
+
 
         df = options[which_cols](df)
 

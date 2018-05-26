@@ -146,6 +146,24 @@ class PassHash:
         
         return df
 
+    def md560befa83b7115d584e02dea9908a707d(self, df):
+
+        # pandas on travis loads the above md5afa7cf6859400c6023d114abc175c24d with 56 cols vs 31 that most users
+        # will get locally so we create another lookup function w the hash of all 56 and slice it down to size.
+        df = df.iloc[:, :31]
+        # rename cols
+        cols = self.base + self.passing + self.rushing + self.receiving
+        df.columns = cols
+
+        # add missing cols
+        df = pd.concat([df, pd.DataFrame(columns=self.rush_sk + self.scoring2p + self.scoring + self.punting)],
+                       axis=1)
+
+        # set all the new columns to zero
+        df.loc[:, self.rush_sk + self.scoring2p + self.scoring + self.punting] = 0
+
+        return df
+
     def md52451894bb088c27b0a02ad350e35b9ad(self, df):
         # rename cols
         cols = self.base + self.passing + self.rushing + self.receiving + self.scoring
