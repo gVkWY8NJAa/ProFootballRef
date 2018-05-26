@@ -92,7 +92,7 @@ class GameLog:
                     "e22db471405382c6d4e868c4d29d9cb5": Passhash.PassHash().md5e22db471405382c6d4e868c4d29d9cb5,
                     "60befa83b7115d584e02dea9908a707d": Passhash.PassHash().md560befa83b7115d584e02dea9908a707d}
 
-        
+
         df = options[which_cols](df)
         #except:
             #print(which_cols, "We errored calling the function here")

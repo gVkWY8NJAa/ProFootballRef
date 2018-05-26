@@ -147,6 +147,9 @@ class PassHash:
         return df
 
     def md560befa83b7115d584e02dea9908a707d(self, df):
+
+        #slice df
+        df = df.iloc[:, :31]
         # rename cols
         cols = self.base + self.passing + self.rushing + self.receiving
         df.columns = cols
