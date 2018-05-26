@@ -88,7 +88,10 @@ class GameLog:
                     "2451894bb088c27b0a02ad350e35b9ad": Passhash.PassHash().md52451894bb088c27b0a02ad350e35b9ad,
                     "e22db471405382c6d4e868c4d29d9cb5": Passhash.PassHash().md5e22db471405382c6d4e868c4d29d9cb5}
 
-        df = options[which_cols](df)
+        try:
+            df = options[which_cols](df)
+        except:
+            print(df.columns)
 
         # send df to the common parser
         df = self.common(df, year)
