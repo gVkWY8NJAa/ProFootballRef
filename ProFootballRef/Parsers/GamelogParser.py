@@ -16,12 +16,13 @@ class GameLog:
         pass
 
     def common(self, dframe, year):
-        #debuggung travis builds
-        print(dframe.columns)
 
         # Drop rk col
-        dframe = dframe.drop(['Rk'], axis=1)
-
+        try:
+            dframe = dframe.drop(['Rk'], axis=1)
+        except:
+            print(dframe.columns)
+            print("we errored in common")
         # drop summary line
         dframe = dframe.loc[pd.notnull(dframe.loc[:, 'G#'])]
 
@@ -91,11 +92,11 @@ class GameLog:
                     "e22db471405382c6d4e868c4d29d9cb5": Passhash.PassHash().md5e22db471405382c6d4e868c4d29d9cb5,
                     "60befa83b7115d584e02dea9908a707d": Passhash.PassHash().md560befa83b7115d584e02dea9908a707d}
 
-        try:
-            df = options[which_cols](df)
-        except:
-            print(which_cols, "We errored here")
-            print(df.columns.levels[0])
+        
+        df = options[which_cols](df)
+        #except:
+            #print(which_cols, "We errored calling the function here")
+            #print(df.columns.levels[0])
 
         # send df to the common parser
         df = self.common(df, year)
