@@ -16,12 +16,12 @@ class GameLog:
         pass
 
     def common(self, dframe, year):
+        #debuggung travis builds
+        print(dframe.columns)
 
         # Drop rk col
-        try:
-            dframe = dframe.drop(['Rk'], axis=1)
-        except:
-            print(dframe.columns)
+        dframe = dframe.drop(['Rk'], axis=1)
+
         # drop summary line
         dframe = dframe.loc[pd.notnull(dframe.loc[:, 'G#'])]
 
