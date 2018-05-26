@@ -18,11 +18,8 @@ class GameLog:
     def common(self, dframe, year):
 
         # Drop rk col
-        try:
-            dframe = dframe.drop(['Rk'], axis=1)
-        except:
-            print(dframe.columns)
-            print("we errored in common")
+        dframe = dframe.drop(['Rk'], axis=1)
+
         # drop summary line
         dframe = dframe.loc[pd.notnull(dframe.loc[:, 'G#'])]
 
@@ -94,9 +91,6 @@ class GameLog:
 
 
         df = options[which_cols](df)
-        #except:
-            #print(which_cols, "We errored calling the function here")
-            #print(df.columns.levels[0])
 
         # send df to the common parser
         df = self.common(df, year)

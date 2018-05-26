@@ -4,7 +4,6 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - python3.6 -m pytest tests/
   - coverage run --source ProFootballRef -m py.test
 after_success:
   - coveralls

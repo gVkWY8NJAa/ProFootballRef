@@ -148,7 +148,8 @@ class PassHash:
 
     def md560befa83b7115d584e02dea9908a707d(self, df):
 
-        #slice df
+        # pandas on travis loads the above md5afa7cf6859400c6023d114abc175c24d with 56 cols vs 31 that most users
+        # will get locally so we create another lookup function w the hash of all 56 and slice it down to size.
         df = df.iloc[:, :31]
         # rename cols
         cols = self.base + self.passing + self.rushing + self.receiving
