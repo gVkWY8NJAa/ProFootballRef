@@ -18,7 +18,7 @@ class GameLog:
     def common(self, dframe, year):
 
         # Drop rk col
-        dframe.drop(['Rk'], axis=1, inplace=True)
+        dframe = dframe.drop(['Rk'], axis=1)
 
         # drop summary line
         dframe = dframe.loc[pd.notnull(dframe.loc[:, 'G#'])]
