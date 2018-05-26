@@ -146,6 +146,20 @@ class PassHash:
         
         return df
 
+    def md560befa83b7115d584e02dea9908a707d(self, df):
+        # rename cols
+        cols = self.base + self.passing + self.rushing + self.receiving
+        df.columns = cols
+
+        # add missing cols
+        df = pd.concat([df, pd.DataFrame(columns=self.rush_sk + self.scoring2p + self.scoring + self.punting)],
+                       axis=1)
+
+        # set all the new columns to zero
+        df.loc[:, self.rush_sk + self.scoring2p + self.scoring + self.punting] = 0
+
+        return df
+
     def md52451894bb088c27b0a02ad350e35b9ad(self, df):
         # rename cols
         cols = self.base + self.passing + self.rushing + self.receiving + self.scoring
