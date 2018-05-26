@@ -94,7 +94,7 @@ class GameLog:
         try:
             df = options[which_cols](df)
         except:
-            print(which_cols)
+            print(which_cols, "We errored here")
             print(df.columns.levels[0])
 
         # send df to the common parser
