@@ -92,7 +92,7 @@ class GameLog:
             df = options[which_cols](df)
         except:
             print(which_cols)
-            print(df.columns)
+            print(df.columns.levels[0])
 
         # send df to the common parser
         df = self.common(df, year)
