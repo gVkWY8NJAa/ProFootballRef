@@ -91,6 +91,7 @@ class GameLog:
         try:
             df = options[which_cols](df)
         except:
+            print(which_cols)
             print(df.columns)
 
         # send df to the common parser
