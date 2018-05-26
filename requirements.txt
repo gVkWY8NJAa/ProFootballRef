@@ -6,3 +6,4 @@ numpy
 requests
 urllib3
 pytest
+coveralls
