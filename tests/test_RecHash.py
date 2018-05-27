@@ -10,6 +10,7 @@ def finalcols():
            Rechash.RecHash().kick_rt + Rechash.RecHash().punt_rt + Rechash.RecHash().scoring2p + \
            Rechash.RecHash().scoring
 
+
 class TestRechash:
     def test_md5b3c4237d9a10de8cfaad61852cb552c4(self, finalcols):
         # generate empty df with cols of length that the site would return in this instance
