@@ -3,7 +3,7 @@ import pandas as pd
 from ProFootballRef.Tools import Passhash
 
 # The purpose of this test class is to ensure that each hash has the correct columns appended if they're not
-# included from the corresponding season game log. 
+# included from the corresponding season game log.
 @pytest.fixture(scope="class")
 def finalcols():
     return Passhash.PassHash().base[1:] + Passhash.PassHash().passing + Passhash.PassHash().rushing + \
@@ -54,8 +54,8 @@ class TestPasshash:
 
     def test_md5c34721f06f1a5aad95fab7fc16577538(self, finalcols):
         # generate empty df with cols of length that the site would return in this instance
-        empty = pd.DataFrame(columns=[x for x in range(0, 29)])
-        all(x in list(Passhash.PassHash().md5366e35869d52cf189f6575ef82c562e1(empty)) for x in finalcols)
+        empty = pd.DataFrame(columns=[x for x in range(0, 30)])
+        all(x in list(Passhash.PassHash().md5c34721f06f1a5aad95fab7fc16577538(empty)) for x in finalcols)
 
     def test_md5afa7cf6859400c6023d114abc175c24d(self, finalcols):
         # generate empty df with cols of length that the site would return in this instance
