@@ -10,6 +10,7 @@ def finalcols():
            Passhash.PassHash().receiving + Passhash.PassHash().rush_sk + Passhash.PassHash().scoring2p + \
            Passhash.PassHash().scoring + Passhash.PassHash().punting
 
+
 class TestPasshash:
 
     def test_md564b4c5df667e588d59b856ae9d724c7d(self, finalcols):
