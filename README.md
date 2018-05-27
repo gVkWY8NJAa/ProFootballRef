@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.org/gVkWY8NJAa/ProFootballRef.svg?branch=master)](https://travis-ci.org/gVkWY8NJAa/ProFootballRef) [![Coverage Status](https://coveralls.io/repos/github/gVkWY8NJAa/ProFootballRef/badge.svg?branch=dev)](https://coveralls.io/github/gVkWY8NJAa/ProFootballRef?branch=dev)
+[![Build Status](https://travis-ci.org/gVkWY8NJAa/ProFootballRef.svg?branch=master)](https://travis-ci.org/gVkWY8NJAa/ProFootballRef) [![Coverage Status](https://coveralls.io/repos/github/gVkWY8NJAa/ProFootballRef/badge.svg?branch=master)](https://coveralls.io/github/gVkWY8NJAa/ProFootballRef?branch=master)
 # ProFootballRef
 
 This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame.
