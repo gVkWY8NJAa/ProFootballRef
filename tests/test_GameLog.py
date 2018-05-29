@@ -28,3 +28,9 @@ class TestGameLogRushing:
     def test_bell_2015(self):
         df = GamelogParser.GameLog().rushing(urls['rushing'], 2015)
         assert df['rush_yds'].sum() == 556
+
+class TestGameLogKicking:
+
+    def test_Zuerlein_2017(self):
+        df = GamelogParser.GameLog().kicking(urls['kicking'], 2017)
+        assert df['XPM'].sum() == 44
