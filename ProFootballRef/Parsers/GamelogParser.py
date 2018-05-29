@@ -7,6 +7,7 @@ from ProFootballRef.Tools import Loader
 from ProFootballRef.Tools import Passhash
 from ProFootballRef.Tools import Rechash
 from ProFootballRef.Tools import Rushhash
+from ProFootballRef.Tools import Kickhash
 
 pd.set_option('display.max_columns', None)
 
@@ -234,3 +235,51 @@ class GameLog:
                 Rushhash.RushHash().scoring]
 
         return df
+
+    def kicking(self, player_link, year, **kwargs):
+        # Set up the gamelog suffix
+        gamelog_suffix = '/gamelog/%s/' % year
+
+        # Modify the player url to point to the gamelog
+        log_url = player_link[:-4] + gamelog_suffix
+
+        # Get html
+        html = Loader.Loader().load_page(log_url).content.decode()
+
+        # ************** generate general stats, these need to be combined later ******************
+        gen = PlayerParser.PlayerParser().parse_general_info(html)
+
+        # parse tables w pandas
+        df = pd.read_html(html)[0]
+
+        # hash the columns to determine which fields are being used
+        which_cols = hashlib.md5(json.dumps(list(df.columns.levels[0])).encode()).hexdigest()
+
+        # Here we make a dict of hashes and their corresponding column parser, this is faster than if/else
+        options = {'080683052961d92b5efd07588e614700': Kickhash.KickHash().md5080683052961d92b5efd07588e614700,
+                   'c0fe30e42184e7a59c00c04dc917bb87': Kickhash.KickHash().md5c0fe30e42184e7a59c00c04dc917bb87}
+
+        df = options[which_cols](df)
+
+        # send df to the common parser
+        df = self.common(df, year)
+
+        # Add the name
+        df.loc[:, 'Name'] = gen['name']
+
+        # Add the players position
+        df.loc[:, 'Pos'] = gen['position']
+
+        df['Throws'] = gen['throws']
+        df['Height'] = gen['height']
+        df['Weight'] = gen['weight']
+        df['DOB_mo'] = gen['bday_mo']
+        df['DOB_day'] = gen['bday_day']
+        df['DOB_yr'] = gen['bday_yr']
+        df['College'] = gen['college']
+
+        df = df[['Name', 'Pos', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College'] +
+                Kickhash.KickHash().base[1:] + ['PF', 'PA'] + Kickhash.KickHash().scoring]
+
+        return df
+
