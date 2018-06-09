@@ -36,7 +36,7 @@ class TeamStats:
         return df
 
     def defense(self, year):
-        defense = pd.read_html('https://www.pro-football-reference.com/years/%s/opp.htm' % (year))[0]
+        defense = pd.read_html('https://www.pro-football-reference.com/years/%s/opp.htm' % year)[0]
 
         # drop rk and multiple unused cols
         defense = defense.iloc[:, 1:28]

@@ -8,6 +8,7 @@ from profootballref.Tools import Passhash
 from profootballref.Tools import Rechash
 from profootballref.Tools import Rushhash
 from profootballref.Tools import Kickhash
+from profootballref.Tools import Defhash
 
 pd.set_option('display.max_columns', None)
 
@@ -198,17 +199,17 @@ class GameLog:
         which_cols = hashlib.md5(json.dumps(list(df.columns.levels[0])).encode()).hexdigest()
 
         # Here we make a dict of hashes and their corresponding column parser, this is faster than if/else
-        options = {'c3695be2dd2fa9307301dccf047b4e86' : Rushhash.RushHash().md5c3695be2dd2fa9307301dccf047b4e86,
-                   '7f97f3885d50fcf9b92797810856a89f' : Rushhash.RushHash().md57f97f3885d50fcf9b92797810856a89f,
-                   'aa321161d6f3f5230259dbc4ae67299a' : Rushhash.RushHash().md5aa321161d6f3f5230259dbc4ae67299a,
-                   '9c11c15180efbf7aec4300fc190cd3a5' : Rushhash.RushHash().md59c11c15180efbf7aec4300fc190cd3a5,
-                   'ad9a12e06546e3019128fec57cdc9d0e' : Rushhash.RushHash().md5ad9a12e06546e3019128fec57cdc9d0e,
-                   '00f83a7c4b3e891e3c448db700cc9ada' : Rushhash.RushHash().md500f83a7c4b3e891e3c448db700cc9ada,
-                   '5980508dab2f61013bd07809c5ca0e41' : Rushhash.RushHash().md55980508dab2f61013bd07809c5ca0e41,
-                   'c35b37a5f0f696bfd1576753faffe81c' : Rushhash.RushHash().md5c35b37a5f0f696bfd1576753faffe81c,
-                   'aed81e3e77b9842532b5efa73458a259' : Rushhash.RushHash().md5aed81e3e77b9842532b5efa73458a259,
-                   '7d21a9a4ab9adde626d633fbd62db5c0' : Rushhash.RushHash().md57d21a9a4ab9adde626d633fbd62db5c0,
-                   '91138c3c08c339b71b8323e2bac3aac7' : Rushhash.RushHash().md591138c3c08c339b71b8323e2bac3aac7}
+        options = {'c3695be2dd2fa9307301dccf047b4e86': Rushhash.RushHash().md5c3695be2dd2fa9307301dccf047b4e86,
+                   '7f97f3885d50fcf9b92797810856a89f': Rushhash.RushHash().md57f97f3885d50fcf9b92797810856a89f,
+                   'aa321161d6f3f5230259dbc4ae67299a': Rushhash.RushHash().md5aa321161d6f3f5230259dbc4ae67299a,
+                   '9c11c15180efbf7aec4300fc190cd3a5': Rushhash.RushHash().md59c11c15180efbf7aec4300fc190cd3a5,
+                   'ad9a12e06546e3019128fec57cdc9d0e': Rushhash.RushHash().md5ad9a12e06546e3019128fec57cdc9d0e,
+                   '00f83a7c4b3e891e3c448db700cc9ada': Rushhash.RushHash().md500f83a7c4b3e891e3c448db700cc9ada,
+                   '5980508dab2f61013bd07809c5ca0e41': Rushhash.RushHash().md55980508dab2f61013bd07809c5ca0e41,
+                   'c35b37a5f0f696bfd1576753faffe81c': Rushhash.RushHash().md5c35b37a5f0f696bfd1576753faffe81c,
+                   'aed81e3e77b9842532b5efa73458a259': Rushhash.RushHash().md5aed81e3e77b9842532b5efa73458a259,
+                   '7d21a9a4ab9adde626d633fbd62db5c0': Rushhash.RushHash().md57d21a9a4ab9adde626d633fbd62db5c0,
+                   '91138c3c08c339b71b8323e2bac3aac7': Rushhash.RushHash().md591138c3c08c339b71b8323e2bac3aac7}
 
         df = options[which_cols](df)
 
@@ -283,3 +284,53 @@ class GameLog:
 
         return df
 
+    def defense(self, player_link, year, **kwargs):
+        # Set up the gamelog suffix
+        gamelog_suffix = '/gamelog/%s/' % year
+
+        # Modify the player url to point to the gamelog
+        log_url = player_link[:-4] + gamelog_suffix
+
+        # Get html
+        html = Loader.Loader().load_page(log_url).content.decode()
+
+        # ************** generate general stats, these need to be combined later ******************
+        gen = PlayerParser.PlayerParser().parse_general_info(html)
+
+        # parse tables w pandas
+        df = pd.read_html(html)[0]
+
+        # hash the columns to determine which fields are being used
+        which_cols = hashlib.md5(json.dumps(list(df.columns.levels[0])).encode()).hexdigest()
+
+        # Here we make a dict of hashes and their corresponding column parser, this is faster than if/else
+        options = {'0c329a15f241e5c132d0d5c7612032c0': Defhash.DefHash().md50c329a15f241e5c132d0d5c7612032c0,
+                   '58ffdd172c2358c5e5ab2e0a1994252a': Defhash.DefHash().md558ffdd172c2358c5e5ab2e0a1994252a,
+                   '141f3f6945aa9495c6580650649f4b8f': Defhash.DefHash().md5141f3f6945aa9495c6580650649f4b8f,
+                   '109394668745222b0ccbd92bfd0ac4c1': Defhash.DefHash().md5109394668745222b0ccbd92bfd0ac4c1,
+                   '60dfaf4e946c4ae3d47c6d8b430c92a4': Defhash.DefHash().md560dfaf4e946c4ae3d47c6d8b430c92a4}
+
+        df = options[which_cols](df)
+
+        # send df to the common parser
+        df = self.common(df, year)
+
+        # Add the name
+        df.loc[:, 'Name'] = gen['name']
+
+        # Add the players position
+        df.loc[:, 'Pos'] = gen['position']
+
+        df['Throws'] = gen['throws']
+        df['Height'] = gen['height']
+        df['Weight'] = gen['weight']
+        df['DOB_mo'] = gen['bday_mo']
+        df['DOB_day'] = gen['bday_day']
+        df['DOB_yr'] = gen['bday_yr']
+        df['College'] = gen['college']
+
+        df = df[['Name', 'Pos', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College'] +
+                Defhash.DefHash().base[1:] + ['PF', 'PA'] +  Defhash.DefHash().punt_rt + Defhash.DefHash().kick_rt +
+                Defhash.DefHash().scoring + Defhash.DefHash().rush_sk + Defhash.DefHash().def_int]
+
+        return df
