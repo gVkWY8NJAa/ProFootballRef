@@ -1,5 +1,5 @@
 import pytest
-from ProFootballRef.Parsers import TeamStats
+from profootballref.Parsers import TeamStats
 
 @pytest.fixture(scope="class")
 def offense():

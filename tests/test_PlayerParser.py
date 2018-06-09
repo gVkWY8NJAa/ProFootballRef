@@ -1,5 +1,5 @@
 import pytest
-from ProFootballRef.Parsers import PlayerParser
+from profootballref.Parsers import PlayerParser
 
 def general_parser(html):
     return PlayerParser.PlayerParser().parse_general_info(html)

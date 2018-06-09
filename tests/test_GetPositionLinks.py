@@ -1,5 +1,5 @@
 import pytest
-from ProFootballRef.LinkBuilder import GetPositionLinks
+from profootballref.LinkBuilder import GetPositionLinks
 
 
 @pytest.fixture(scope="class")

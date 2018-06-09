@@ -1,5 +1,5 @@
 import pytest
-from ProFootballRef.Tools import Loader
+from profootballref.Tools import Loader
 
 urls = {'passing' : 'https://www.pro-football-reference.com/players/B/BradTo00.htm',
         'receiving' : 'https://www.pro-football-reference.com/players/B/BrowAn04.htm',

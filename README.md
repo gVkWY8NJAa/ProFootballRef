@@ -32,8 +32,8 @@ python3.6 -m pytest tests/
 
 ```python
 # Individual player statistics for passing
-from ProFootballRef.LinkBuilder import GetPositionLinks
-from ProFootballRef.Parsers import PlayerParser
+from profootballref.LinkBuilder import GetPositionLinks
+from profootballref.Parsers import PlayerParser
 
 links = GetPositionLinks.GetPositionLinks('passing').player_links(2017)
 passing_df = PlayerParser.PlayerParser().passing(links[:1][0])
@@ -214,8 +214,8 @@ Individual player metrics are gathered using a five step process to allow you gr
 
 
 ```python
-from ProFootballRef.LinkBuilder import GetPositionLinks
-from ProFootballRef.Parsers import PlayerParser
+from profootballref.LinkBuilder import GetPositionLinks
+from profootballref.Parsers import PlayerParser
 ```
 
 First we need to generate pages to scrape based on position. This is a two step process.
@@ -438,8 +438,8 @@ df.head()
 
 ```python
 import pandas as pd
-from ProFootballRef.LinkBuilder import GetPositionLinks
-from ProFootballRef.Parsers import PlayerParser
+from profootballref.LinkBuilder import GetPositionLinks
+from profootballref.Parsers import PlayerParser
 
 # Initialize an empty DataFrame to store all the players
 all_qb = pd.DataFrame()
@@ -705,7 +705,7 @@ Simply pass a season (year) to the **offense()** method in the **TeamStats()** c
 
 
 ```python
-from ProFootballRef.Parsers import TeamStats
+from profootballref.Parsers import TeamStats
 
 year = 2015
 df = TeamStats.TeamStats().offense(year)
@@ -880,7 +880,7 @@ Simply pass a season (year) to the **defense()** method in the **TeamStats()** c
 
 
 ```python
-from ProFootballRef.Parsers import TeamStats
+from profootballref.Parsers import TeamStats
 
 year = 2015
 df = TeamStats.TeamStats().defense(year)

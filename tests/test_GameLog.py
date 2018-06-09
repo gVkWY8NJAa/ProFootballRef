@@ -1,5 +1,5 @@
 import pytest
-from ProFootballRef.Parsers import GamelogParser
+from profootballref.Parsers import GamelogParser
 
 urls = {'passing' : 'https://www.pro-football-reference.com/players/B/BradTo00.htm',
         'receiving' : 'https://www.pro-football-reference.com/players/B/BrowAn04.htm',
