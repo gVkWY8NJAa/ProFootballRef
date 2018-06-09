@@ -4,7 +4,7 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - coverage run --source Profootballref -m py.test
+  - coverage run --source profootballref -m py.test
 after_success:
   - coveralls
 
