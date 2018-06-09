@@ -2,12 +2,12 @@ import calendar
 import pandas as pd
 import hashlib
 import json
-from ProFootballRef.Parsers import PlayerParser
-from ProFootballRef.Tools import Loader
-from ProFootballRef.Tools import Passhash
-from ProFootballRef.Tools import Rechash
-from ProFootballRef.Tools import Rushhash
-from ProFootballRef.Tools import Kickhash
+from profootballref.Parsers import PlayerParser
+from profootballref.Tools import Loader
+from profootballref.Tools import Passhash
+from profootballref.Tools import Rechash
+from profootballref.Tools import Rushhash
+from profootballref.Tools import Kickhash
 
 pd.set_option('display.max_columns', None)
 

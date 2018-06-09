@@ -1,5 +1,5 @@
 import re
-from ProFootballRef.Tools import Loader
+from profootballref.Tools import Loader
 
 
 class GetPositionLinks:

@@ -2,7 +2,7 @@ import re
 import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup, Comment
-from ProFootballRef.Tools import Loader
+from profootballref.Tools import Loader
 
 class PlayerParser:
     def __init__(self):

@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from ProFootballRef.Tools import Rechash
+from profootballref.Tools import Rechash
 
 # The purpose of this test class is to ensure that each hash has the correct columns appended if they're not
 # included from the corresponding season game log.
