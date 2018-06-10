@@ -10,7 +10,7 @@ Please consider contributing the $20/yr to support the site, they do a great job
 * [Installation](#installation)
 * [Testing](#testing)
 * [Player stats](#player_stats)
-    * [Individual player stats per season](#career player stats)
+    * [Individual player stats per season](#career_player_stats)
     * [Multiple player stats for a given season](#multi_player_stats)
     * [Multiple player stats for multiple seasons](#multi_player_multi_season)
     * [Gamelog](#gamelog)
