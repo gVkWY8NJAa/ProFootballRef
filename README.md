@@ -43,7 +43,7 @@ python3.6 -m pytest tests/
 ## Player stats
 ---
 The following code demonstrates how to return career position statistics given a player. This is the data that would be found on the [players page](https://www.pro-football-reference.com/players/B/BradTo00.htm).
-<a id='career player stats'></a>
+<a id='career_player_stats'></a>
 ### Individual player stats per season
 In this example, we will pass a url for a given player to return their career stats for their position. We start out by not knowing the url of the player to scrape, so we will gather all urls of players for the position we are interested in for a given season.
 
