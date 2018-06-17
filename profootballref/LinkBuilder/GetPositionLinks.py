@@ -2,7 +2,7 @@ import re
 from profootballref.Tools import Loader
 
 
-class GetPositionLinks:
+class Position:
     def __init__(self, *args):
         # setup urls based on position passed into the class
         if args[0] == 'receiving':
