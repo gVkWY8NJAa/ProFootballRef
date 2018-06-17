@@ -4,27 +4,27 @@ from profootballref.LinkBuilder import GetPositionLinks
 
 @pytest.fixture(scope="class")
 def receiving():
-    return GetPositionLinks.GetPositionLinks('receiving').player_links('2017')
+    return GetPositionLinks.Position('receiving').player_links('2017')
 
 
 @pytest.fixture(scope="class")
 def rushing():
-    return GetPositionLinks.GetPositionLinks('rushing').player_links('2017')
+    return GetPositionLinks.Position('rushing').player_links('2017')
 
 
 @pytest.fixture(scope="class")
 def passing():
-    return GetPositionLinks.GetPositionLinks('passing').player_links('2017')
+    return GetPositionLinks.Position('passing').player_links('2017')
 
 
 @pytest.fixture(scope="class")
 def defense():
-    return GetPositionLinks.GetPositionLinks('defense').player_links('2017')
+    return GetPositionLinks.Position('defense').player_links('2017')
 
 
 @pytest.fixture(scope="class")
 def kicking():
-    return GetPositionLinks.GetPositionLinks('kicking').player_links('2017')
+    return GetPositionLinks.Position('kicking').player_links('2017')
 
 
 class TestReceiving:

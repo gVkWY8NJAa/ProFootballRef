@@ -9,6 +9,7 @@ Please consider contributing the $20/yr to support the site, they do a great job
 ## Contents
 * [Installation](#installation)
 * [Testing](#testing)
+* [Find players](#find_players)
 * [Player stats](#player_stats)
     * [Individual player stats per season](#career_player_stats)
     * [Multiple player stats for a given season](#multi_player_stats)
@@ -39,21 +40,75 @@ pip install -r requirements.txt
 cd <path/to/ProFootballRef>
 python3.6 -m pytest tests/
 ```
+<a id='find_players'></a>
+## Find Players
+---
+Before we do anything, we need to gather a list of urls for various players to parse.
+
+This is easily done by importing the **GetPositionLinks** module that resides in the 'LinkBuilder' directory:
+
+
+```python
+from profootballref.LinkBuilder import GetPositionLinks
+```
+
+The **GetPositionLinks** module contains a class called **Position**.
+
+To generate urls to parse, we'll call the **player_links** method from the **Position** class, and save the output to a list.
+The **Position** class takes one of five possible arguments:
+* passing
+* receiving
+* rushing
+* kicking
+* defense
+
+The **player_links** method takes a season as an integer:
+
+
+```python
+urls = GetPositionLinks.Position('passing').player_links(2017)
+```
+
+We'll look at the first five urls in the list:
+
+
+```python
+print(urls[:5])
+```
+
+    ['https://www.pro-football-reference.com/players/B/BradTo00.htm', 'https://www.pro-football-reference.com/players/R/RivePh00.htm', 'https://www.pro-football-reference.com/players/M/MannEl00.htm', 'https://www.pro-football-reference.com/players/S/StafMa00.htm', 'https://www.pro-football-reference.com/players/R/RoetBe00.htm']
+
+
 <a id='player_stats'></a>
 ## Player stats
 ---
 The following code demonstrates how to return career position statistics given a player. This is the data that would be found on the [players page](https://www.pro-football-reference.com/players/B/BradTo00.htm).
 <a id='career_player_stats'></a>
 ### Individual player stats per season
-In this example, we will pass a url for a given player to return their career stats for their position. We start out by not knowing the url of the player to scrape, so we will gather all urls of players for the position we are interested in for a given season.
+In this example, we will [pass a url as a string for a given player](#find_players) that we created previously to return their career stats for their position. If you do not yet have a list of urls for a given position, see the above section [Find Players](#find_players).
+
+This is easily done by importing the **PlayerParser** module that resides in the 'Parsers' directory:
 
 
 ```python
-# Individual player statistics for passing
-from profootballref.LinkBuilder import GetPositionLinks
 from profootballref.Parsers import PlayerParser
+```
 
-urls = GetPositionLinks.GetPositionLinks('passing').player_links(2017)
+The **PlayerParser** module contains a class also called **PlayerParser**.
+
+To scrape a player(s) career stats, we'll call one of five methods from the **PlayerParser** class, and save the output to a variable.
+
+The available methods from the **PlayerParser** class are:
+* passing
+* receiving
+* rushing
+* kicking
+* defense
+
+Remember we're using the 'urls' data from what we did in the [Find Players](#find_players) section above.
+
+
+```python
 passing_df = PlayerParser.PlayerParser().passing(urls[:1][0])
 ```
 
@@ -216,239 +271,11 @@ passing_df.head()
 <p>5 rows × 58 columns</p>
 </div>
 
-### Detailed Usage
-
-Individual player metrics are gathered using an internal five step process to allow you granular control as to how much data you want to obtain. The modularity also aids in refactoring if/when the website code is ever updated:
-1. Generate urls to scrape.
-2. Request, and return, html for each url.
-3. Parse general info such as height and weight from the returned html.
-4. Parse performance metrics specific to the position.
-5. Combine the general heigh/weight with the performance metrics.
-
-In practice, this can be simplified to a two step process:
-1. Generate urls to strape.
-2. Pass the url(s) to the PlayerParser class for processing.
-
-
-```python
-from profootballref.LinkBuilder import GetPositionLinks
-from profootballref.Parsers import PlayerParser
-```
-
-First we need to generate pages to scrape based on position. There are two parameters required for this process.
-1. Call the corresponding position to the **GetPositionLinks()** class: passing, receiving, rushing, kicking, or defense. This tells the class which urls it needs to request. In the example below, we assign the position name to the variable 'position'.
-2. Pass a season (year) to the **player_links()** function to get the players of the corresponding position who played during the season. In the example below, we assign the year to a variable called 'season'.
-
-
-```python
-position = 'passing'
-season = 2017
-urls = GetPositionLinks.GetPositionLinks(position).player_links(season)
-```
-
-As you can see below, a list of urls is returned for each player of the position, and season, that was requested.
-
-
-```python
-urls[:5]
-```
-
-
-
-
-    ['https://www.pro-football-reference.com/players/B/BradTo00.htm',
-     'https://www.pro-football-reference.com/players/R/RivePh00.htm',
-     'https://www.pro-football-reference.com/players/M/MannEl00.htm',
-     'https://www.pro-football-reference.com/players/S/StafMa00.htm',
-     'https://www.pro-football-reference.com/players/R/RoetBe00.htm']
-
-
-
-Second, we will call the parser specific to the position, and pass to it a url *as a string* that we wish to scrape.
-
-The positions you can choose from are:
-
-**receiving()**
-
-**rushing()**
-
-**passing()**
-
-**defense()**
-
-**kicking()**
-
-Each of these parsers will return a Pandas DataFrame object.
-
-
-```python
-df = PlayerParser.PlayerParser().passing(urls[:1][0])
-```
-
-
-```python
-df.head()
-```
-
-<div>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Name</th>
-      <th>Year</th>
-      <th>Age</th>
-      <th>Throws</th>
-      <th>Height</th>
-      <th>Weight</th>
-      <th>DOB_mo</th>
-      <th>DOB_day</th>
-      <th>DOB_yr</th>
-      <th>College</th>
-      <th>...</th>
-      <th>Rec_Yds</th>
-      <th>Y/R</th>
-      <th>Rec_TD</th>
-      <th>Rec_Lng</th>
-      <th>R/G</th>
-      <th>Rec_Y/G</th>
-      <th>Ctch%</th>
-      <th>YScm</th>
-      <th>RRTD</th>
-      <th>Fmb</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Tom Brady</td>
-      <td>2001</td>
-      <td>24.0</td>
-      <td>Right</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>Michigan</td>
-      <td>...</td>
-      <td>23.0</td>
-      <td>23.0</td>
-      <td>0.0</td>
-      <td>23.0</td>
-      <td>0.1</td>
-      <td>1.5</td>
-      <td>100.0%</td>
-      <td>66</td>
-      <td>0</td>
-      <td>12.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Tom Brady</td>
-      <td>2002</td>
-      <td>25.0</td>
-      <td>Right</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>Michigan</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>110</td>
-      <td>1</td>
-      <td>11.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Tom Brady</td>
-      <td>2003</td>
-      <td>26.0</td>
-      <td>Right</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>Michigan</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>63</td>
-      <td>1</td>
-      <td>13.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Tom Brady</td>
-      <td>2004</td>
-      <td>27.0</td>
-      <td>Right</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>Michigan</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>28</td>
-      <td>0</td>
-      <td>7.0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Tom Brady</td>
-      <td>2005</td>
-      <td>28.0</td>
-      <td>Right</td>
-      <td>76</td>
-      <td>225</td>
-      <td>8</td>
-      <td>3</td>
-      <td>1977</td>
-      <td>Michigan</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>89</td>
-      <td>1</td>
-      <td>4.0</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 58 columns</p>
-</div>
-
 
 
 <a id='multi_player_stats'></a>
 ### Multiple player stats for a given season
-**This will generate a ton of traffic to the website so use caution.**
+**This can generate a ton of traffic to the website so use caution with how many players you retrieve at one time.**
 
 
 ```python
@@ -464,7 +291,7 @@ position = 'passing'
 season = 2017
 
 # Generate a list of urls for the players in that season
-links = GetPositionLinks.GetPositionLinks(position).player_links(season)
+links = GetPositionLinks.Position(position).player_links(season)
 
 # We will scrape the first 5 players in the list of links
 for player in links[:5]:
@@ -562,8 +389,8 @@ all_qb.groupby(['Name']).sum()
       <th>Eli Manning</th>
       <td>28147</td>
       <td>413.0</td>
-      <td>1064</td>
-      <td>3052</td>
+      <td>1078</td>
+      <td>3080</td>
       <td>14</td>
       <td>42</td>
       <td>27734</td>
@@ -669,7 +496,7 @@ If you need to get players from multiple seasons, it is easiest to make a pruned
 ```python
 big_list = []
 for year in range(2015,2017):
-    big_list = big_list + GetPositionLinks.GetPositionLinks('passing').player_links(year)
+    big_list = big_list + GetPositionLinks.Position('passing').player_links(year)
 ```
 
 
@@ -723,7 +550,7 @@ from profootballref.Parsers import GamelogParser
 position = 'passing'
 season = 2017
 
-urls = GetPositionLinks.GetPositionLinks(position).player_links(season)
+urls = GetPositionLinks.Position(position).player_links(season)
 
 # view the first url as a string
 urls[:1][0]
