@@ -62,7 +62,10 @@ class PlayerParser:
         cols = ['Year', 'Age', 'Tm', 'Pos', 'No', 'G', 'GS', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng', 'R/G',
                 'Rec_Y/G', 'Ctch%', 'Rush', 'Rush_Yds', 'Rush_TD', 'Rush_Lng', 'Y/A', 'Rush_Y/G', 'A/G', 'YScm', 'RRTD',
                 'Fmb', 'AV']
-        df.columns = cols
+        try:
+            df.columns = cols
+        except:
+            print('Column mismatch, check url: ', url)
 
         # remove the career totals row
         df = df[df.Year != 'Career']
@@ -129,7 +132,11 @@ class PlayerParser:
         cols = ['Year', 'Age', 'Tm', 'Pos', 'No', 'G', 'GS', 'Rush', 'Rush_Yds', 'Rush_TD', 'Rush_Lng', 'Y/A',
                 'Rush_Y/G', 'A/G', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng', 'R/G', 'Rec_Y/G', 'Ctch%',
                 'YScm', 'RRTD', 'Fmb', 'AV']
-        df.columns = cols
+
+        try:
+            df.columns = cols
+        except:
+            print('Column mismatch, check url: ', url)
 
         # remove the career totals row
         df = df[df.Year != 'Career']
@@ -190,11 +197,15 @@ class PlayerParser:
         # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
         df = pd.read_html(html)[0]
 
+        df = df.iloc[:, :31]
+
         cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'QBrec', 'Cmp', 'Att', 'Cmp%', 'Yds', 'TD', 'TD%', 'Int',
                 'Int%', 'Lng', 'Pass_Y/A', 'AY/A', 'Y/C', 'Y/G', 'Rate', 'QBR', 'Sk', 'Sk_Yds', 'NY/A', 'ANY/A', 'Sk%',
                 '4QC', 'GWD', 'AV']
-        df.columns = cols
-
+        try:
+            df.columns = cols
+        except:
+            print('Column mismatch, check url: ', url)
         # remove the career totals row
         df = df[df.Year != 'Career']
 
@@ -237,18 +248,23 @@ class PlayerParser:
         soup = BeautifulSoup(html, 'lxml')
 
         # parse out the chunk of rushing and receiving info from the html comments
+        print('trying ', url)
         for comment in soup.findAll(text=lambda text: isinstance(text, Comment)):
             if 'id="div_rushing_and_receiving">' in comment:
                 new_html = comment
 
-        rush_df = pd.read_html(new_html)[0]
+                rush_df = pd.read_html(new_html)[0]
+                rush_df = rush_df.iloc[:, :26]
 
-        # rename columns
-        new_cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'Rush', 'Rush_Yds', 'Rush_TD', 'Rush_Lng', 'Rush_Y/A',
+            # rename columns
+                new_cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'Rush', 'Rush_Yds', 'Rush_TD', 'Rush_Lng', 'Rush_Y/A',
                     'Rush_Y/G', 'A/G', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng', 'R/G', 'Rec_Y/G', 'Ctch%',
                     'YScm', 'RRTD', 'Fmb']
 
-        rush_df.columns = new_cols
+                try:
+                    rush_df.columns = new_cols
+                except:
+                    print('Column mismatch, check url: ', url)
 
         # munge the columns similar to above
         # remove the career totals row
@@ -296,7 +312,10 @@ class PlayerParser:
         cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'Int', 'Yds', 'TD', 'Lng', 'PD', 'FF', 'Fmb', 'FR',
                 'Fmb_Yds','Fmb_TD', 'Sk', 'Tkl', 'Ast', 'Sfty', 'AV']
 
-        df.columns = cols
+        try:
+            df.columns = cols
+        except:
+            print('Column mismatch, check url: ', url)
 
         # remove the career totals row
         df = df[df.Year != 'Career']
@@ -359,7 +378,10 @@ class PlayerParser:
                 '30-39FGM', '40-49FGA', '40-49FGM', '50+FGA', '50+FGM', 'scr_FGA', 'scr_FGM', 'Lng', 'scr_FG%',
                 'scr_XPA', 'scr_XPM', 'scr_XP%', 'Pnt', 'Yds', 'Lng', 'Blck', 'Y/P', 'AV']
 
-        df.columns = cols
+        try:
+            df.columns = cols
+        except:
+            print('Column mismatch, check url: ', url)
 
         # remove the career totals row
         df = df[df.Year != 'Career']
