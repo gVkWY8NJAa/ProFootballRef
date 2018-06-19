@@ -1,11 +1,12 @@
 
-
 [![Build Status](https://travis-ci.org/gVkWY8NJAa/ProFootballRef.svg?branch=master)](https://travis-ci.org/gVkWY8NJAa/ProFootballRef) [![Coverage Status](https://coveralls.io/repos/github/gVkWY8NJAa/ProFootballRef/badge.svg?branch=master)](https://coveralls.io/github/gVkWY8NJAa/ProFootballRef?branch=master)
 # ProFootballRef </hr>
 
-This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame.
+This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame. 
 
 Please consider contributing the $20/yr to support the site, they do a great job: https://www.pro-football-reference.com/my/?do=ad_free_browsing
+
+If you come across a url that is not parsed properly, please open an issue for the corresponding url.
 
 ## Contents
 * [Installation](#installation)
@@ -52,7 +53,7 @@ This is easily done by importing the **GetPositionLinks** module that resides in
 from profootballref.LinkBuilder import GetPositionLinks
 ```
 
-The **GetPositionLinks** module contains a class called **Position**.
+The **GetPositionLinks** module contains a class called **Position**. 
 
 To generate urls to parse, we'll call the **player_links** method from the **Position** class, and save the output to a list.
 The **Position** class takes one of five possible arguments:
@@ -69,7 +70,7 @@ The **player_links** method takes either a season, or a range of seasons, as int
 urls = GetPositionLinks.Position('passing').player_links(2017)
 ```
 
-or to grab all players from a range of seaons do:
+Or, to grab all players from a range of season do:
 
 
 ```python
@@ -89,7 +90,7 @@ print(urls[:5])
 
 
 <a id='player_stats'></a>
-## Player stats
+## Player stats 
 ---
 The following code demonstrates how to return career position statistics given a player. This is the data that would be found on the [players page](https://www.pro-football-reference.com/players/B/BradTo00.htm).
 <a id='career_player_stats'></a>
@@ -103,7 +104,7 @@ This is easily done by importing the **PlayerParser** module that resides in the
 from profootballref.Parsers import PlayerParser
 ```
 
-The **PlayerParser** module contains a class also called **PlayerParser**.
+The **PlayerParser** module contains a class also called **PlayerParser**. 
 
 To scrape a player(s) career stats, we'll call one of five methods from the **PlayerParser** class, and save the output to a variable.
 
@@ -120,9 +121,6 @@ Remember we're using the 'urls' data from what we did in the [Find Players](#fin
 ```python
 passing_df = PlayerParser.PlayerParser().passing(urls[:1][0])
 ```
-
-    https://www.pro-football-reference.com/players/R/RivePh00.htm
-
 
 
 ```python
@@ -178,9 +176,9 @@ passing_df.head()
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>-5</td>
-      <td>0</td>
-      <td>1.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>1</th>
@@ -202,9 +200,9 @@ passing_df.head()
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>-1</td>
-      <td>0</td>
-      <td>2.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>2</th>
@@ -226,9 +224,9 @@ passing_df.head()
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>49</td>
-      <td>0</td>
-      <td>8.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>3</th>
@@ -250,9 +248,9 @@ passing_df.head()
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>33</td>
-      <td>1</td>
-      <td>11.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
     <tr>
       <th>4</th>
@@ -274,13 +272,13 @@ passing_df.head()
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>84</td>
-      <td>0</td>
-      <td>8.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
     </tr>
   </tbody>
 </table>
-<p>5 rows × 58 columns</p>
+<p>5 rows × 59 columns</p>
 </div>
 
 
@@ -295,39 +293,37 @@ import pandas as pd
 from profootballref.LinkBuilder import GetPositionLinks
 from profootballref.Parsers import PlayerParser
 import random
+from importlib import reload
 
+reload(PlayerParser)
 # Initialize an empty DataFrame to store all the players
 all_qb = pd.DataFrame()
-
+ 
 # Specify which position and season we want
 position = 'passing'
 
 # In this example we'll generate a list of urls multiple seasons
-links = GetPositionLinks.Position(position).player_links(2013,2015)
+links = GetPositionLinks.Position(position).player_links(2015,2017)
 
 all_qb = pd.DataFrame()
 # We will scrape the 10 players at random in the list of links
 for player in random.sample(links, 10):
     # pass the url to the position parser
     stats = PlayerParser.PlayerParser().passing(player)
-
+    
     # concat the results with our catch-all dataframe
     all_qb = pd.concat([all_qb, stats], axis=0)
 ```
 
-    https://www.pro-football-reference.com/players/P/PondCh00.htm
-    https://www.pro-football-reference.com/players/T/TannRy00.htm
-    https://www.pro-football-reference.com/players/P/PetePa00.htm  is not a quarterback we can parse so we're skipping this player
-    https://www.pro-football-reference.com/players/K/KeenCa00.htm
-    https://www.pro-football-reference.com/players/L/LechSh20.htm  is not a quarterback we can parse so we're skipping this player
-    https://www.pro-football-reference.com/players/G/GlenMi00.htm
-    https://www.pro-football-reference.com/players/S/SandAc00.htm  is not a quarterback we can parse so we're skipping this player
-    https://www.pro-football-reference.com/players/F/FlynMa00.htm
-    https://www.pro-football-reference.com/players/F/FostAr00.htm  is not a quarterback we can parse so we're skipping this player
-    https://www.pro-football-reference.com/players/A/AndeDe00.htm
+    https://www.pro-football-reference.com/players/M/McKiJe00.htm  is not a quarterback we can parse so we're skipping this player
+    https://www.pro-football-reference.com/players/S/SneaWi00.htm  is not a quarterback we can parse so we're skipping this player
+    https://www.pro-football-reference.com/players/M/McAfPa44.htm  is not a quarterback we can parse so we're skipping this player
+    https://www.pro-football-reference.com/players/G/GrimJo01.htm  is not a quarterback we can parse so we're skipping this player
+    https://www.pro-football-reference.com/players/B/BaldDo00.htm  is not a quarterback we can parse so we're skipping this player
+    https://www.pro-football-reference.com/players/H/HuffJo00.htm  is not a quarterback we can parse so we're skipping this player
 
 
-Notice that in the above example, some links output "*url* is not a quarterback we can parse so we're skipping this player". This is due to players other than quarterbacks who have made passes, such as kickers, RBs etc. To avoid this, we ignore the player completely and do not try to parse the page as if it were a quarterback.
+Notice that in the above example, some links output "*url* is not a quarterback we can parse so we're skipping this player". This is due to players other than quarterbacks who have made passes, such as kickers, RBs etc. To avoid this, we ignore the player completely, and do not try to parse the page as if it were a quarterback.
 
 This is intended behavior of all position methods in the **PlayerParser** class.
 
@@ -351,19 +347,19 @@ all_qb.groupby(['Name']).sum()
       <th>DOB_day</th>
       <th>DOB_yr</th>
       <th>No.</th>
+      <th>G</th>
       <th>Cmp</th>
-      <th>Att</th>
       <th>...</th>
-      <th>Tgt</th>
-      <th>Rec</th>
-      <th>Rec_Yds</th>
-      <th>Y/R</th>
-      <th>Rec_TD</th>
-      <th>Rec_Lng</th>
-      <th>R/G</th>
-      <th>Rec_Y/G</th>
-      <th>YScm</th>
-      <th>RRTD</th>
+      <th>Y/G</th>
+      <th>Rate</th>
+      <th>QBR</th>
+      <th>Sk</th>
+      <th>Sk_Yds</th>
+      <th>NY/A</th>
+      <th>ANY/A</th>
+      <th>Sk%</th>
+      <th>4QC</th>
+      <th>GWD</th>
     </tr>
     <tr>
       <th>Name</th>
@@ -392,152 +388,104 @@ all_qb.groupby(['Name']).sum()
   </thead>
   <tbody>
     <tr>
-      <th>Case Keenum</th>
-      <td>10075</td>
-      <td>135.0</td>
-      <td>365</td>
-      <td>1075</td>
-      <td>10</td>
-      <td>85</td>
-      <td>9940</td>
-      <td>48.0</td>
-      <td>779</td>
-      <td>1258.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>323</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <th>Christian Ponder</th>
-      <td>6036</td>
-      <td>72.0</td>
-      <td>222</td>
-      <td>666</td>
-      <td>6</td>
-      <td>75</td>
-      <td>5964</td>
-      <td>21.0</td>
-      <td>610</td>
-      <td>1013.0</td>
-      <td>...</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>-15.0</td>
-      <td>-15.0</td>
-      <td>0.0</td>
-      <td>-15.0</td>
-      <td>0.1</td>
-      <td>-0.9</td>
-      <td>608</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <th>Derek Anderson</th>
-      <td>22126</td>
-      <td>313.0</td>
-      <td>858</td>
-      <td>2519</td>
-      <td>66</td>
-      <td>165</td>
-      <td>21813</td>
-      <td>33.0</td>
-      <td>863</td>
-      <td>1600.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>227</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>Matt Flynn</th>
-      <td>14077</td>
-      <td>182.0</td>
-      <td>518</td>
-      <td>1596</td>
+      <th>Ben Roethlisberger</th>
+      <td>28147</td>
+      <td>399.0</td>
+      <td>1078</td>
+      <td>3360</td>
       <td>42</td>
-      <td>140</td>
-      <td>13895</td>
-      <td>65.0</td>
-      <td>219</td>
-      <td>357.0</td>
+      <td>28</td>
+      <td>27748</td>
+      <td>98.0</td>
+      <td>200.0</td>
+      <td>4164.0</td>
       <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>69</td>
-      <td>1</td>
+      <td>3575.2</td>
+      <td>1319.5</td>
+      <td>772.4</td>
+      <td>477.0</td>
+      <td>3147.0</td>
+      <td>96.73</td>
+      <td>94.08</td>
+      <td>98.1</td>
+      <td>29.0</td>
+      <td>39.0</td>
     </tr>
     <tr>
-      <th>Mike Glennon</th>
-      <td>2013</td>
-      <td>24.0</td>
-      <td>78</td>
-      <td>229</td>
-      <td>12</td>
-      <td>12</td>
-      <td>1989</td>
-      <td>8.0</td>
-      <td>247</td>
-      <td>416.0</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>37</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>Ryan Tannehill</th>
-      <td>10070</td>
-      <td>130.0</td>
-      <td>380</td>
-      <td>1080</td>
+      <th>Colt McCoy</th>
+      <td>14092</td>
+      <td>190.0</td>
+      <td>511</td>
+      <td>1470</td>
+      <td>63</td>
       <td>35</td>
-      <td>135</td>
-      <td>9940</td>
-      <td>85.0</td>
-      <td>1653</td>
-      <td>2637.0</td>
+      <td>13902</td>
+      <td>82.0</td>
+      <td>35.0</td>
+      <td>508.0</td>
       <td>...</td>
-      <td>2.0</td>
+      <td>776.2</td>
+      <td>583.3</td>
+      <td>198.8</td>
+      <td>77.0</td>
+      <td>460.0</td>
+      <td>42.69</td>
+      <td>43.34</td>
+      <td>54.9</td>
       <td>2.0</td>
       <td>5.0</td>
-      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>Peyton Manning</th>
+      <td>36117</td>
+      <td>514.0</td>
+      <td>1386</td>
+      <td>4140</td>
+      <td>54</td>
+      <td>432</td>
+      <td>35568</td>
+      <td>306.0</td>
+      <td>266.0</td>
+      <td>6125.0</td>
+      <td>...</td>
+      <td>4580.6</td>
+      <td>1629.8</td>
+      <td>675.6</td>
+      <td>303.0</td>
+      <td>1953.0</td>
+      <td>122.82</td>
+      <td>121.30</td>
+      <td>54.1</td>
+      <td>43.0</td>
+      <td>54.0</td>
+    </tr>
+    <tr>
+      <th>Sean Renfree</th>
+      <td>4029</td>
+      <td>49.0</td>
+      <td>150</td>
+      <td>438</td>
+      <td>8</td>
+      <td>56</td>
+      <td>3980</td>
+      <td>12.0</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>...</td>
+      <td>5.5</td>
+      <td>10.7</td>
+      <td>0.9</td>
+      <td>2.0</td>
+      <td>17.0</td>
+      <td>-0.67</td>
+      <td>-5.67</td>
+      <td>22.2</td>
       <td>0.0</td>
-      <td>9.0</td>
-      <td>0.2</td>
-      <td>0.3</td>
-      <td>1070</td>
-      <td>6</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
-<p>6 rows × 47 columns</p>
+<p>4 rows × 31 columns</p>
 </div>
 
 
@@ -548,7 +496,7 @@ Individual player gamelog stats can be obtained for a player(s) for a given seas
 
 
 ```python
-from profootballref.LinkBuilder import GetPositionLinks
+from profootballref.LinkBuilder import GetPositionLinks 
 from profootballref.Parsers import GamelogParser
 
 # gather player urls for a given season
