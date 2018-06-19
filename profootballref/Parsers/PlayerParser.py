@@ -134,7 +134,6 @@ class PlayerParser:
 
     def rushing(self, url=None, **kwargs):
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
-        print("trying ", url)
         if url:
             response = Loader.Loader().load_page(url)
             html = response.content.decode()
@@ -161,7 +160,6 @@ class PlayerParser:
                 return pd.DataFrame()
             #return pd.DataFrame()
         else:
-
             # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
             df = pd.read_html(html)[0]
 
@@ -256,22 +254,24 @@ class PlayerParser:
                     'ANY/A', 'Sk%', '4QC', 'GWD', 'AV']
             try:
                 df.columns = cols
-            except:
+            except ValueError:
                 print('Column mismatch, check url: ', url)
             # remove the career totals row
+            df['Year'] = df['Year'].astype(str)
             df = df[df.Year != 'Career']
+            df = df[df.Year != '1 yr']
+            df = df[df.Year != '2 yrs']
+            df = df[df.Year != '3 yrs']
 
             # remove spec characters that are sometimes added to the year to indicate probowl, all pro etc
             df['Year'] = df['Year'].str.replace('+', '')
             df['Year'] = df['Year'].str.replace('*', '')
 
             # some players have multiple rows w.o a year if they played on more than 1 team in that year
-            df['Year'] = df['Year'].astype(str)
             df = df[df.Year != 'nan']
             df['Year'] = pd.to_numeric(df['Year'])
 
             # uppercase some qualitatives
-            df['Pos'] = df['Pos'].str.upper()
             df['Tm'] = df['Tm'].str.upper()
 
             # Insert general scraped info from player page
@@ -288,13 +288,13 @@ class PlayerParser:
             # This is hacky but position info isn't always contained in every row
             if df['Pos'].isnull().values.any():
                 df['Pos'] = general_stats['position']
-
+            df['Pos'] = df['Pos'].str.upper()
 
             # rearange the dataframe columns, this is personal preference
             df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College',
                      'Tm', 'Pos', 'No.', 'G', 'GS', 'QBrec', 'Cmp', 'Att', 'Cmp%', 'Yds', 'TD', 'TD%', 'Int', 'Int%',
-                     'Lng', 'Pass_Y/A', 'AY/A', 'Y/C', 'Y/G', 'Rate', 'QBR', 'Sk', 'Sk_Yds', 'NY/A', 'ANY/A', 'Sk%', '4QC',
-                     'GWD', 'AV']]
+                     'Lng', 'Pass_Y/A', 'AY/A', 'Y/C', 'Y/G', 'Rate', 'QBR', 'Sk', 'Sk_Yds', 'NY/A', 'ANY/A', 'Sk%',
+                     '4QC', 'GWD', 'AV']]
 
             # Parse out rushing and receiving information and append to the passing info
             soup = BeautifulSoup(html, 'lxml')
@@ -307,35 +307,42 @@ class PlayerParser:
                     rush_df = pd.read_html(new_html)[0]
                     rush_df = rush_df.iloc[:, :26]
 
-                # rename columns
-                    new_cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'Rush', 'Rush_Yds', 'Rush_TD', 'Rush_Lng',
-                                'Rush_Y/A', 'Rush_Y/G', 'A/G', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng',
-                                'R/G', 'Rec_Y/G', 'Ctch%', 'YScm', 'RRTD', 'Fmb']
-
+                    rush_cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'Rush', 'Rush_Yds', 'Rush_TD',
+                                 'Rush_Lng',
+                                 'Rush_Y/A', 'Rush_Y/G', 'A/G', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng',
+                                 'R/G', 'Rec_Y/G', 'Ctch%', 'YScm', 'RRTD', 'Fmb']
                     try:
-                        rush_df.columns = new_cols
-                    except:
+                        rush_df.columns = rush_cols
+                    except ValueError:
                         print('Column mismatch, check url: ', url)
 
-            # munge the columns similar to above
-            # remove the career totals row
-            rush_df = rush_df[rush_df.Year != 'Career']
+                    # munge the columns similar to above
+                    # remove the career totals row
+                    print(url)
+                    rush_df['Year'] = rush_df['Year'].astype(str)
+                    rush_df = rush_df[rush_df.Year != 'Career']
+                    rush_df = rush_df[rush_df.Year != '1 yr']
+                    rush_df = rush_df[rush_df.Year != '2 yrs']
+                    rush_df = rush_df[rush_df.Year != '3 yrs']
 
-            # remove spec characters that are sometimes added to the year to indicate probowl, all pro etc
-            rush_df['Year'] = rush_df['Year'].str.replace('+', '')
-            rush_df['Year'] = rush_df['Year'].str.replace('*', '')
+                    # remove spec characters that are sometimes added to the year to indicate probowl, all pro etc
+                    rush_df['Year'] = rush_df['Year'].str.replace('+', '')
+                    rush_df['Year'] = rush_df['Year'].str.replace('*', '')
 
-            # some players have multiple rows w.o a year if they played on more than 1 team in that year
-            rush_df['Year'] = rush_df['Year'].astype(str)
-            rush_df = rush_df[rush_df.Year != 'nan']
-            rush_df['Year'] = pd.to_numeric(rush_df['Year'])
+                    # some players have multiple rows w.o a year if they played on more than 1 team in that year
+                    rush_df = rush_df[rush_df.Year != 'nan']
+                    rush_df['Year'] = pd.to_numeric(rush_df['Year'])
 
-            # uppercase some qualitatives
-            rush_df['Pos'] = rush_df['Pos'].str.upper()
-            rush_df['Tm'] = rush_df['Tm'].str.upper()
+                    # uppercase some qualitatives
+                    rush_df['Tm'] = rush_df['Tm'].str.upper()
 
-            # merging on GS breaks for some reason so drop the col
-            rush_df = rush_df.drop(['GS'], axis=1)
+                    # This is hacky but position info isn't always contained in every row
+                    if rush_df['Pos'].isnull().values.any():
+                        rush_df['Pos'] = general_stats['position']
+                        rush_df['Pos'] = rush_df['Pos'].str.upper()
+
+                    # merging on GS breaks for some reason so drop the col
+                    rush_df = rush_df.drop(['GS'], axis=1)
 
             # merge the two DataFrames on overlapping columns and return
             combined_df = pd.merge(df, rush_df, on=['Year', 'Age', 'No.', 'G', 'Pos', 'Tm'])
@@ -344,7 +351,6 @@ class PlayerParser:
 
     def defense(self, url=None, **kwargs):
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
-        print('trying ', url)
         if url:
             response = Loader.Loader().load_page(url)
             html = response.content.decode()
