@@ -150,7 +150,8 @@ class GameLog:
                     "6b4698269dd34a823cf6b233c6165614": Rechash.RecHash().md56b4698269dd34a823cf6b233c6165614,
                     "7f97f3885d50fcf9b92797810856a89f": Rechash.RecHash().md57f97f3885d50fcf9b92797810856a89f,
                     "aa321161d6f3f5230259dbc4ae67299a": Rechash.RecHash().md5aa321161d6f3f5230259dbc4ae67299a,
-                    "1193d47266d4acdcf1b6fca165121100": Rechash.RecHash().md51193d47266d4acdcf1b6fca165121100}
+                    "1193d47266d4acdcf1b6fca165121100": Rechash.RecHash().md51193d47266d4acdcf1b6fca165121100,
+                    "52589e869a13d76c6d0dbf066cab536f": Rechash.RecHash().md552589e869a13d76c6d0dbf066cab536f}
 
         df = options[which_cols](df)
 

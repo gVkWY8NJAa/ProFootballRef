@@ -202,3 +202,17 @@ class RecHash:
 
         return df
 
+    def md552589e869a13d76c6d0dbf066cab536f(self, df):
+        # Rename columns
+        df.columns = self.base + self.receiving + self.rush_sk
+
+        # add missing cols
+        df = pd.concat(
+            [df, pd.DataFrame(columns=self.punt_rt + self.rushing + self.kick_rt + self.scoring + self.scoring2p)],
+            axis=1)
+
+        # set all the new columns to zero
+        df.loc[:, self.punt_rt + self.rushing + self.kick_rt + self.scoring + self.scoring2p] = 0
+
+        return df
+

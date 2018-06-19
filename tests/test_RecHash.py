@@ -81,3 +81,8 @@ class TestRechash:
         # generate empty df with cols of length that the site would return in this instance
         empty = pd.DataFrame(columns=[x for x in range(0, 43)])
         assert all(x in list(Rechash.RecHash().md51193d47266d4acdcf1b6fca165121100(empty)) for x in finalcols)
+
+    def test_md552589e869a13d76c6d0dbf066cab536f(self, finalcols):
+        # generate empty df with cols of length that the site would return in this instance
+        empty = pd.DataFrame(columns=[x for x in range(0, 18)])
+        assert all(x in list(Rechash.RecHash().md552589e869a13d76c6d0dbf066cab536f(empty)) for x in finalcols)
