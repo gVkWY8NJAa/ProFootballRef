@@ -330,9 +330,8 @@ class PlayerParser:
                     rush_df['Tm'] = rush_df['Tm'].str.upper()
 
                     # This is hacky but position info isn't always contained in every row
-                    if rush_df['Pos'].isnull().values.any():
-                        rush_df['Pos'] = general_stats['position']
-                        rush_df['Pos'] = rush_df['Pos'].str.upper()
+                    rush_df['Pos'] = general_stats['position']
+                    rush_df['Pos'] = rush_df['Pos'].str.upper()
 
                     # merging on GS breaks for some reason so drop the col
                     rush_df = rush_df.drop(['GS'], axis=1)
@@ -343,9 +342,9 @@ class PlayerParser:
             combined_df = pd.merge(df, rush_df, on=['Year', 'Age', 'No.', 'G', 'Pos', 'Tm'], how='left')
 
             # This is hacky but position info isn't always contained in every row
-            if df['Pos'].isnull().values.any():
-                df['Pos'] = general_stats['position']
-            df['Pos'] = df['Pos'].str.upper()
+            #if df['Pos'].isnull().values.any():
+            combined_df['Pos'] = general_stats['position']
+            combined_df['Pos'] = combined_df['Pos'].str.upper()
 
         return combined_df
 
