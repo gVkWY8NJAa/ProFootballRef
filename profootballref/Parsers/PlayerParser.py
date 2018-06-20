@@ -62,6 +62,7 @@ class PlayerParser:
         # structure is the same for both positions, we'll call one or the other. If the position is anything else, we
         # wont try to parse it
         parseablePositions = ['TE', 'WR']
+
         if not any(x in general_stats['position'] for x in parseablePositions):
             if any(x in general_stats['position'] for x in ['RB', 'FB']):
                 print(url, " is a ", general_stats['position'], " calling rushing method instead")
@@ -110,7 +111,6 @@ class PlayerParser:
 
             # Insert general scraped info from player page
             df['Name'] = general_stats['name']
-
             df['Throws'] = general_stats['throws']
             df['Height'] = general_stats['height']
             df['Weight'] = general_stats['weight']
@@ -145,12 +145,11 @@ class PlayerParser:
         # Scrape general stats
         general_stats = self.parse_general_info(html)
 
-        parseablePositions = ['RB', 'FB']
-        notParsable = ['DB', 'DT', 'K', 'P', 'QB', 'CB', 'DE', 'S']
-
         # Here we test to see if the player page being called is for a running back or a receiver. Since the dataframe
         # structure is the same for both positions, we'll call one or the other. If the position is anything else, we
         # wont try to parse it
+        parseablePositions = ['RB', 'FB']
+
         if not any(x in general_stats['position'] for x in parseablePositions):
             if any(x in general_stats['position'] for x in ['WR', 'TE']):
                 print(url, " is a ", general_stats['position'], " calling receiving method instead")
@@ -201,7 +200,6 @@ class PlayerParser:
 
             # Insert general scraped info from player page
             df['Name'] = general_stats['name']
-
             df['Throws'] = general_stats['throws']
             df['Height'] = general_stats['height']
             df['Weight'] = general_stats['weight']
@@ -238,11 +236,11 @@ class PlayerParser:
 
         # Ensure we're only parsing QB's
         parseablePositions = ['QB']
+
         if not any(x in general_stats['position'] for x in parseablePositions):
             print(url, " is not a quarterback we can parse so we're skipping this player")
             return pd.DataFrame()
         else:
-
             # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a
             # pd.DataFrame.
             df = pd.read_html(html)[0]
@@ -262,6 +260,8 @@ class PlayerParser:
             df = df[df.Year != '1 yr']
             df = df[df.Year != '2 yrs']
             df = df[df.Year != '3 yrs']
+            df = df[df.Year != '4 yrs']
+            df = df[df.Year != '5 yrs']
 
             # remove spec characters that are sometimes added to the year to indicate probowl, all pro etc
             df['Year'] = df['Year'].str.replace('+', '')
@@ -276,7 +276,6 @@ class PlayerParser:
 
             # Insert general scraped info from player page
             df['Name'] = general_stats['name']
-
             df['Throws'] = general_stats['throws']
             df['Height'] = general_stats['height']
             df['Weight'] = general_stats['weight']
@@ -284,11 +283,6 @@ class PlayerParser:
             df['DOB_day'] = general_stats['bday_day']
             df['DOB_yr'] = general_stats['bday_yr']
             df['College'] = general_stats['college']
-
-            # This is hacky but position info isn't always contained in every row
-            if df['Pos'].isnull().values.any():
-                df['Pos'] = general_stats['position']
-            df['Pos'] = df['Pos'].str.upper()
 
             # rearange the dataframe columns, this is personal preference
             df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College',
@@ -300,6 +294,10 @@ class PlayerParser:
             soup = BeautifulSoup(html, 'lxml')
 
             # parse out the chunk of rushing and receiving info from the html comments
+            rush_cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'Rush', 'Rush_Yds', 'Rush_TD',
+                         'Rush_Lng', 'Rush_Y/A', 'Rush_Y/G', 'A/G', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng',
+                         'R/G', 'Rec_Y/G', 'Ctch%', 'YScm', 'RRTD', 'Fmb']
+
             for comment in soup.findAll(text=lambda text: isinstance(text, Comment)):
                 if 'id="div_rushing_and_receiving">' in comment:
                     new_html = comment
@@ -307,10 +305,6 @@ class PlayerParser:
                     rush_df = pd.read_html(new_html)[0]
                     rush_df = rush_df.iloc[:, :26]
 
-                    rush_cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'Rush', 'Rush_Yds', 'Rush_TD',
-                                 'Rush_Lng',
-                                 'Rush_Y/A', 'Rush_Y/G', 'A/G', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng',
-                                 'R/G', 'Rec_Y/G', 'Ctch%', 'YScm', 'RRTD', 'Fmb']
                     try:
                         rush_df.columns = rush_cols
                     except ValueError:
@@ -318,7 +312,6 @@ class PlayerParser:
 
                     # munge the columns similar to above
                     # remove the career totals row
-                    print(url)
                     rush_df['Year'] = rush_df['Year'].astype(str)
                     rush_df = rush_df[rush_df.Year != 'Career']
                     rush_df = rush_df[rush_df.Year != '1 yr']
@@ -337,15 +330,21 @@ class PlayerParser:
                     rush_df['Tm'] = rush_df['Tm'].str.upper()
 
                     # This is hacky but position info isn't always contained in every row
-                    if rush_df['Pos'].isnull().values.any():
-                        rush_df['Pos'] = general_stats['position']
-                        rush_df['Pos'] = rush_df['Pos'].str.upper()
+                    rush_df['Pos'] = general_stats['position']
+                    rush_df['Pos'] = rush_df['Pos'].str.upper()
 
                     # merging on GS breaks for some reason so drop the col
                     rush_df = rush_df.drop(['GS'], axis=1)
+                else:
+                    rush_df = pd.DataFrame(columns=rush_cols)
 
             # merge the two DataFrames on overlapping columns and return
-            combined_df = pd.merge(df, rush_df, on=['Year', 'Age', 'No.', 'G', 'Pos', 'Tm'])
+            combined_df = pd.merge(df, rush_df, on=['Year', 'Age', 'No.', 'G', 'Pos', 'Tm'], how='left')
+
+            # This is hacky but position info isn't always contained in every row
+            #if df['Pos'].isnull().values.any():
+            combined_df['Pos'] = general_stats['position']
+            combined_df['Pos'] = combined_df['Pos'].str.upper()
 
         return combined_df
 
@@ -428,56 +427,62 @@ class PlayerParser:
         # Scrape general stats
         general_stats = self.parse_general_info(html)
 
-        # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
-        df = pd.read_html(html)[0]
+        # Ensure we're only parsing QB's
+        parseablePositions = ['K', 'P']
 
-        # sometimes there's unneeded cols
-        df = df.iloc[:, :30]
+        if not any(x in general_stats['position'] for x in parseablePositions):
+            print(url, " is not a kicker we can parse so we're skipping this player")
+            return pd.DataFrame()
+        else:
 
-        # rename columns from original multirow colums
-        cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', '0-19FGA', '0-19FGM', '20-29FGA', '20-29FGM', '30-39FGA',
-                '30-39FGM', '40-49FGA', '40-49FGM', '50+FGA', '50+FGM', 'scr_FGA', 'scr_FGM', 'Lng', 'scr_FG%',
-                'scr_XPA', 'scr_XPM', 'scr_XP%', 'Pnt', 'Yds', 'Lng', 'Blck', 'Y/P', 'AV']
+            # load the stats table into pandas dataframe. Using 'df' as the variable name to signify it's a pd.DataFrame.
+            df = pd.read_html(html)[0]
 
-        try:
-            df.columns = cols
-        except:
-            print('Column mismatch, check url: ', url)
+            # sometimes there's unneeded cols
+            df = df.iloc[:, :30]
 
-        # remove the career totals row
-        df = df[df.Year != 'Career']
+            # rename columns from original multirow colums
+            cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', '0-19FGA', '0-19FGM', '20-29FGA', '20-29FGM', '30-39FGA',
+                    '30-39FGM', '40-49FGA', '40-49FGM', '50+FGA', '50+FGM', 'scr_FGA', 'scr_FGM', 'Lng', 'scr_FG%',
+                    'scr_XPA', 'scr_XPM', 'scr_XP%', 'Pnt', 'Yds', 'Lng', 'Blck', 'Y/P', 'AV']
 
-        # remove spec characters that are sometimes added to the year to indicate probowl, all pro etc
-        df['Year'] = df['Year'].str.replace('+', '')
-        df['Year'] = df['Year'].str.replace('*', '')
+            try:
+                df.columns = cols
+            except ValueError:
+                print('Column mismatch, check url: ', url)
 
-        # some players have multiple rows w.o a year if they played on more than 1 team in that year
-        df['Year'] = df['Year'].astype(str)
-        df = df[df.Year != 'nan']
-        df['Year'] = pd.to_numeric(df['Year'])
+            # remove the career totals row
+            df = df[df.Year != 'Career']
 
-        # uppercase some qualitatives
-        df['Pos'] = df['Pos'].str.upper()
-        df['Tm'] = df['Tm'].str.upper()
+            # remove spec characters that are sometimes added to the year to indicate probowl, all pro etc
+            df['Year'] = df['Year'].astype(str)
+            df['Year'] = df['Year'].str.replace('+', '')
+            df['Year'] = df['Year'].str.replace('*', '')
 
-        # Insert general scraped info from player page
-        df['Name'] = general_stats['name']
+            # some players have multiple rows w.o a year if they played on more than 1 team in that year
+            df = df[df.Year != 'nan']
+            df['Year'] = pd.to_numeric(df['Year'])
 
-        df['Throws'] = general_stats['throws']
-        df['Height'] = general_stats['height']
-        df['Weight'] = general_stats['weight']
-        df['DOB_mo'] = general_stats['bday_mo']
-        df['DOB_day'] = general_stats['bday_day']
-        df['DOB_yr'] = general_stats['bday_yr']
-        df['College'] = general_stats['college']
+            # uppercase some qualitatives
+            df['Tm'] = df['Tm'].str.upper()
 
-        # This is hacky but position info isn't always contained in every row
-        if df['Pos'].isnull().values.any():
-            df['Pos'] = general_stats['position']
+            # Insert general scraped info from player page
+            df['Name'] = general_stats['name']
+            df['Throws'] = general_stats['throws']
+            df['Height'] = general_stats['height']
+            df['Weight'] = general_stats['weight']
+            df['DOB_mo'] = general_stats['bday_mo']
+            df['DOB_day'] = general_stats['bday_day']
+            df['DOB_yr'] = general_stats['bday_yr']
+            df['College'] = general_stats['college']
 
-        df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College', 'Tm',
-                 'Pos', 'No.', 'G', 'GS', '0-19FGA', '0-19FGM', '20-29FGA', '20-29FGM', '30-39FGA', '30-39FGM',
-                 '40-49FGA', '40-49FGM', '50+FGA', '50+FGM', 'scr_FGA', 'scr_FGM', 'Lng', 'scr_FG%', 'scr_XPA',
-                 'scr_XPM', 'scr_XP%', 'Pnt', 'Yds', 'Lng', 'Blck', 'Y/P', 'AV']]
+            # This is hacky but position info isn't always contained in every row
+            if df['Pos'].isnull().values.any():
+                df['Pos'] = general_stats['position']
+
+            df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College', 'Tm',
+                     'Pos', 'No.', 'G', 'GS', '0-19FGA', '0-19FGM', '20-29FGA', '20-29FGM', '30-39FGA', '30-39FGM',
+                     '40-49FGA', '40-49FGM', '50+FGA', '50+FGM', 'scr_FGA', 'scr_FGM', 'Lng', 'scr_FG%', 'scr_XPA',
+                     'scr_XPM', 'scr_XP%', 'Pnt', 'Yds', 'Lng', 'Blck', 'Y/P', 'AV']]
 
         return df
