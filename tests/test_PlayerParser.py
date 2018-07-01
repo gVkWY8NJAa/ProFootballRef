@@ -48,6 +48,27 @@ class TestPassing:
         df = PlayerParser.PlayerParser().passing(html=html)
         assert df.iloc[0]['Pos'] == 'QB'
 
+    def test_df_rush(self, passing_req):
+        html = passing_req.content.decode()
+        df = PlayerParser.PlayerParser().passing(html=html)
+        assert df['Rush_Yds'].sum() == 968.0
+
+    # in the below tests we slice the df to that new seasons don't fail the test
+    def test_df_rush_td(self, passing_req):
+        html = passing_req.content.decode()
+        df = PlayerParser.PlayerParser().passing(html=html)
+        assert df.loc[0:17,'Rush_TD'].sum() == 17
+
+    def test_df_pass_yds(self, passing_req):
+        html = passing_req.content.decode()
+        df = PlayerParser.PlayerParser().passing(html=html)
+        assert df.loc[0:17,'Yds'].sum() == 66159
+
+    def test_df_pass_td(self, passing_req):
+        html = passing_req.content.decode()
+        df = PlayerParser.PlayerParser().passing(html=html)
+        assert df.loc[0:17,'TD'].sum() == 488
+
 class TestReceiving:
 
     # test to see if the dataframe is coming back correctly

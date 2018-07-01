@@ -271,10 +271,10 @@ class PlayerParser:
             df = df[df.Year != 'nan']
             df['Year'] = pd.to_numeric(df['Year'])
 
-            # uppercase some qualitatives
-            df['Tm'] = df['Tm'].str.upper()
+            df['GS'] = pd.to_numeric(df['GS'])
 
             # Insert general scraped info from player page
+            df['Pos'] = general_stats['position']
             df['Name'] = general_stats['name']
             df['Throws'] = general_stats['throws']
             df['Height'] = general_stats['height']
@@ -283,6 +283,10 @@ class PlayerParser:
             df['DOB_day'] = general_stats['bday_day']
             df['DOB_yr'] = general_stats['bday_yr']
             df['College'] = general_stats['college']
+
+            # uppercase some qualitatives
+            df['Tm'] = df['Tm'].str.upper()
+            df['Pos'] = df['Pos'].str.upper()
 
             # rearange the dataframe columns, this is personal preference
             df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College',
@@ -300,7 +304,7 @@ class PlayerParser:
 
             # we need to keep track of if we actually found rushing info
             found = False
-
+ 
             #Rushing info for QBs is commented out unless java is enabled, so search comments
             for comment in soup.findAll(text=lambda text: isinstance(text, Comment)):
                 if 'id="div_rushing_and_receiving">' in comment:
@@ -330,15 +334,12 @@ class PlayerParser:
                     rush_df = rush_df[rush_df.Year != 'nan']
                     rush_df['Year'] = pd.to_numeric(rush_df['Year'])
 
-                    # uppercase some qualitatives
-                    rush_df['Tm'] = rush_df['Tm'].str.upper()
-
                     # This is hacky but position info isn't always contained in every row
                     rush_df['Pos'] = general_stats['position']
-                    rush_df['Pos'] = rush_df['Pos'].str.upper()
 
-                    # merging on GS breaks for some reason so drop the col
-                    rush_df = rush_df.drop(['GS'], axis=1)
+                    # uppercase some qualitatives
+                    rush_df['Tm'] = rush_df['Tm'].str.upper()
+                    rush_df['Pos'] = rush_df['Pos'].str.upper()
 
                     # Ensure that we know we have the rushing info we're looking for
                     found = True
@@ -348,12 +349,7 @@ class PlayerParser:
                 rush_df = pd.DataFrame(columns=rush_cols)
 
             # merge the two DataFrames on overlapping columns and return
-            combined_df = pd.merge(df, rush_df, on=['Year', 'Age', 'No.', 'G', 'Pos', 'Tm'], how='left')
-
-            # This is hacky but position info isn't always contained in every row
-            #if df['Pos'].isnull().values.any():
-            combined_df['Pos'] = general_stats['position']
-            combined_df['Pos'] = combined_df['Pos'].str.upper()
+            combined_df = pd.merge(df, rush_df, on=['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS'], how='left')
 
         return combined_df
 
