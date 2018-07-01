@@ -298,6 +298,10 @@ class PlayerParser:
                          'Rush_Lng', 'Rush_Y/A', 'Rush_Y/G', 'A/G', 'Tgt', 'Rec', 'Rec_Yds', 'Y/R', 'Rec_TD', 'Rec_Lng',
                          'R/G', 'Rec_Y/G', 'Ctch%', 'YScm', 'RRTD', 'Fmb']
 
+            # we need to keep track of if we actually found rushing info
+            found = False
+
+            #Rushing info for QBs is commented out unless java is enabled, so search comments
             for comment in soup.findAll(text=lambda text: isinstance(text, Comment)):
                 if 'id="div_rushing_and_receiving">' in comment:
                     new_html = comment
@@ -335,8 +339,13 @@ class PlayerParser:
 
                     # merging on GS breaks for some reason so drop the col
                     rush_df = rush_df.drop(['GS'], axis=1)
-                else:
-                    rush_df = pd.DataFrame(columns=rush_cols)
+
+                    # Ensure that we know we have the rushing info we're looking for
+                    found = True
+
+            # if we didn't get any rushing info, create an empty df
+            if not found:
+                rush_df = pd.DataFrame(columns=rush_cols)
 
             # merge the two DataFrames on overlapping columns and return
             combined_df = pd.merge(df, rush_df, on=['Year', 'Age', 'No.', 'G', 'Pos', 'Tm'], how='left')
