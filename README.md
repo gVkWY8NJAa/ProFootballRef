@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/gVkWY8NJAa/ProFootballRef.svg?branch=master)](https://travis-ci.org/gVkWY8NJAa/ProFootballRef) [![Coverage Status](https://coveralls.io/repos/github/gVkWY8NJAa/ProFootballRef/badge.svg?branch=master)](https://coveralls.io/github/gVkWY8NJAa/ProFootballRef?branch=master)
 # ProFootballRef </hr>
 
-This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame. 
+This is a python toolkit that lets you scrape statistics from https://www.pro-football-reference.com/, and return the resulting data as a Pandas DataFrame.
 
 Please consider contributing the $20/yr to support the site, they do a great job: https://www.pro-football-reference.com/my/?do=ad_free_browsing
 
@@ -53,7 +53,7 @@ This is easily done by importing the **GetPositionLinks** module that resides in
 from profootballref.LinkBuilder import GetPositionLinks
 ```
 
-The **GetPositionLinks** module contains a class called **Position**. 
+The **GetPositionLinks** module contains a class called **Position**.
 
 To generate urls to parse, we'll call the **player_links** method from the **Position** class, and save the output to a list.
 The **Position** class takes one of five possible arguments:
@@ -90,7 +90,7 @@ print(urls[:5])
 
 
 <a id='player_stats'></a>
-## Player stats 
+## Player stats
 ---
 The following code demonstrates how to return career position statistics given a player. This is the data that would be found on the [players page](https://www.pro-football-reference.com/players/B/BradTo00.htm).
 <a id='career_player_stats'></a>
@@ -104,7 +104,7 @@ This is easily done by importing the **PlayerParser** module that resides in the
 from profootballref.Parsers import PlayerParser
 ```
 
-The **PlayerParser** module contains a class also called **PlayerParser**. 
+The **PlayerParser** module contains a class also called **PlayerParser**.
 
 To scrape a player(s) career stats, we'll call one of five methods from the **PlayerParser** class, and save the output to a variable.
 
@@ -295,10 +295,9 @@ from profootballref.Parsers import PlayerParser
 import random
 from importlib import reload
 
-reload(PlayerParser)
 # Initialize an empty DataFrame to store all the players
 all_qb = pd.DataFrame()
- 
+
 # Specify which position and season we want
 position = 'passing'
 
@@ -310,7 +309,7 @@ all_qb = pd.DataFrame()
 for player in random.sample(links, 10):
     # pass the url to the position parser
     stats = PlayerParser.PlayerParser().passing(player)
-    
+
     # concat the results with our catch-all dataframe
     all_qb = pd.concat([all_qb, stats], axis=0)
 ```
@@ -496,7 +495,7 @@ Individual player gamelog stats can be obtained for a player(s) for a given seas
 
 
 ```python
-from profootballref.LinkBuilder import GetPositionLinks 
+from profootballref.LinkBuilder import GetPositionLinks
 from profootballref.Parsers import GamelogParser
 
 # gather player urls for a given season
