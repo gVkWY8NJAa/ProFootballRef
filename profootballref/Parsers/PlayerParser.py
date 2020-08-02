@@ -49,7 +49,7 @@ class PlayerParser:
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
         if url:
             response = Loader.Loader().load_page(url)
-            html = response.content.decode()
+            html = response.text
         else:
             for k, v in kwargs.items():
                 if k == 'html':
@@ -88,7 +88,8 @@ class PlayerParser:
                 return pd.DataFrame()
 
             # remove the career totals row
-            df = df[df.Year != 'Career']
+            df['Age'] = pd.to_numeric(df['Age'], errors='coerce')
+            df = df[~df['Age'].isna()]
 
             # remove spec characters that are sometimes added to the year to indicate probowl, all pro etc
             df['Year'] = df['Year'].str.replace('+', '')
@@ -136,7 +137,7 @@ class PlayerParser:
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
         if url:
             response = Loader.Loader().load_page(url)
-            html = response.content.decode()
+            html = response.text
         else:
             for k, v in kwargs.items():
                 if k == 'html':
@@ -177,7 +178,8 @@ class PlayerParser:
                 return pd.DataFrame()
 
             # remove the career totals row
-            df = df[df.Year != 'Career']
+            df['Age'] = pd.to_numeric(df['Age'], errors='coerce')
+            df = df[~df['Age'].isna()]
 
             # remove spec characters that are sometimes added to the year to indicate probowl, all pro etc
             df['Year'] = df['Year'].str.replace('+', '')
@@ -335,7 +337,7 @@ class PlayerParser:
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
         if url:
             response = Loader.Loader().load_page(url)
-            html = response.content.decode()
+            html = response.text
         else:
             for k, v in kwargs.items():
                 if k == 'html':
@@ -359,11 +361,8 @@ class PlayerParser:
             return pd.DataFrame()
 
         # remove the career totals row
-        df['Year'] = df['Year'].astype(str)
-        df = df[df.Year != 'Career']
-        df = df[df.Year != '1 yr']
-        df = df[df.Year != '2 yrs']
-        df = df[df.Year != '3 yrs']
+        df['Age'] = pd.to_numeric(df['Age'], errors='coerce')
+        df = df[~df['Age'].isna()]
 
         # some players have multiple rows w.o a year if they played on more than 1 team in that year
         df = df[df.Year != 'nan']
@@ -401,7 +400,7 @@ class PlayerParser:
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
         if url:
             response = Loader.Loader().load_page(url)
-            html = response.content.decode()
+            html = response.text
         else:
             for k, v in kwargs.items():
                 if k == 'html':
@@ -435,7 +434,8 @@ class PlayerParser:
                 print('Column mismatch, check url: ', url)
 
             # remove the career totals row
-            df = df[df.Year != 'Career']
+            df['Age'] = pd.to_numeric(df['Age'], errors='coerce')
+            df = df[~df['Age'].isna()]
 
             # remove spec characters that are sometimes added to the year to indicate probowl, all pro etc
             df['Year'] = df['Year'].astype(str)
