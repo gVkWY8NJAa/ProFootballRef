@@ -4,7 +4,7 @@ import pandas as pd
 class DefHash:
     def __init__(self):
         # Combinations of header labels
-        self.base = ['Rk', 'Date', 'G#', 'Age', 'Tm', 'Home', 'Opp', 'Result']
+        self.base = ['Rk', 'Date', 'G#', 'Age', 'Tm', 'Home', 'Opp', 'Result', 'GS']
 
         self.rush_sk = ['rush_sk', 'tkl', 'Ast']
 
@@ -73,5 +73,17 @@ class DefHash:
 
         # set all the new columns to zero
         df.loc[:, self.kick_rt + self.punt_rt] = 0
+
+        return df
+
+    def md5fa476dd5c907f86452c016e54b3fe0f8(self, df):
+        # Rename columns
+        df.columns = self.base + self.kick_rt + self.punt_rt + self.rush_sk + self.def_int
+
+        # add missing cols
+        df = pd.concat([df, pd.DataFrame(columns=self.scoring)], axis=1)
+
+        # set all the new columns to zero
+        df.loc[:, self.scoring] = 0
 
         return df

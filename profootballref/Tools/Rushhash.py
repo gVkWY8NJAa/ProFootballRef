@@ -5,7 +5,7 @@ class RushHash:
     def __init__(self):
         # Combinations of header labels
         # Combinations of header labels
-        self.base = ['Rk', 'Date', 'G#', 'Age', 'Tm', 'Home', 'Opp', 'Result']
+        self.base = ['Rk', 'Date', 'G#', 'Age', 'Tm', 'Home', 'Opp', 'Result', 'GS']
         self.receiving = ['Rec_Tgt', 'Rec_Rec', 'Rec_Yds', 'Rec_Y/R', 'Rec_TD', 'Rec_Ctch%', 'Rec_Y/Tgt']
         self.rushing = ['rush_att', 'rush_yds', 'rush_Y/A', 'rush_TD']
         self.passing = ['pass_cmp', 'pass_att', 'Cmp%', 'pass_yds', 'pass_td', 'Int', 'Rate', 'Sk', 'Sk-Yds',
@@ -147,5 +147,18 @@ class RushHash:
 
         # set all the new columns to zero
         df.loc[:, self.punt_rt + self.kick_rt + self.receiving + self.scoring2p] = 0
+
+        return df
+
+    def md5ddcb0610869ff21799f008209ac6d229(self, df):
+        # Rename columns
+        df.columns = self.base + self.rushing + self.receiving + self.scoring
+
+        # add missing cols
+        df = pd.concat([df, pd.DataFrame(columns=self.punt_rt + self.kick_rt + self.scoring2p)],
+                       axis=1)
+
+        # set all the new columns to zero
+        df.loc[:, self.punt_rt + self.kick_rt + self.scoring2p] = 0
 
         return df

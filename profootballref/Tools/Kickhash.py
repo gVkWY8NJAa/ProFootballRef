@@ -4,7 +4,7 @@ import pandas as pd
 class KickHash:
     def __init__(self):
         # Combinations of header labels
-        self.base = ['Rk', 'Date', 'G#', 'Age', 'Tm', 'Home', 'Opp', 'Result']
+        self.base = ['Rk', 'Date', 'G#', 'Age', 'Tm', 'Home', 'Opp', 'Result', 'GS']
         self.rush_sk = ['rush_sk', 'tkl', 'Ast']
         self.scoring = ['XPM', 'XPA', 'XP%', 'FGM', 'FGA', 'FG%', 'TD', 'Pts']
 
@@ -25,3 +25,17 @@ class KickHash:
         df.loc[:, self.rush_sk] = 0
 
         return df
+
+    def md57ad30bf95e287937864b02dca25801bf(self, df):
+        # Rename columns
+        df.columns = self.base + self.scoring
+
+        # add missing cols
+        df = pd.concat([df, pd.DataFrame(columns=self.rush_sk)], axis=1)
+
+        # set all the new columns to zero
+        df.loc[:, self.rush_sk] = 0
+
+        return df
+
+
