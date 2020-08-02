@@ -4,7 +4,7 @@ import pandas as pd
 class RecHash:
     def __init__(self):
         # Combinations of header labels
-        self.base = ['Rk', 'Date', 'G#', 'Age', 'Tm', 'Home', 'Opp', 'Result']
+        self.base = ['Rk', 'Date', 'G#', 'Age', 'Tm', 'Home', 'Opp', 'Result', 'GS']
         self.receiving = ['Rec_Tgt', 'Rec_Rec', 'Rec_Yds', 'Rec_Y/R', 'Rec_TD', 'Rec_Ctch%', 'Rec_Y/Tgt']
         self.rushing = ['rush_att', 'rush_yds', 'rush_Y/A', 'rush_TD']
         self.passing = ['pass_cmp', 'pass_att', 'Cmp%', 'pass_yds', 'pass_td', 'Int', 'Rate', 'Sk', 'Sk-Yds',
@@ -213,6 +213,18 @@ class RecHash:
 
         # set all the new columns to zero
         df.loc[:, self.punt_rt + self.rushing + self.kick_rt + self.scoring + self.scoring2p] = 0
+
+        return df
+
+    def md5d522b9357244c20714a3b21f8f404918(self, df):
+        # Rename columns
+        df.columns = self.base + self.receiving + self.rushing + self.passing + self.kick_rt + self.punt_rt + self.scoring + self.rush_sk
+
+        # add missing cols
+        df = pd.concat([df, pd.DataFrame(columns=self.scoring2p)], axis=1)
+
+        # set all the new columns to zero
+        df.loc[:, self.scoring2p] = 0
 
         return df
 

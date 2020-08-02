@@ -73,32 +73,23 @@ class GameLog:
         # parse tables w pandas
         df = pd.read_html(html)[0]
 
-        # make a hash of the column names to tell which values exist
-        which_cols = hashlib.md5(json.dumps(list(df.columns.levels[0])).encode()).hexdigest()
+        # drop first level of cols
+        df.columns = df.columns.droplevel()
 
-        # Here we make a dict of hashes and their corresponding column parser, this is faster than if/else
-        options = {"64b4c5df667e588d59b856ae9d724c7d": Passhash.PassHash().md564b4c5df667e588d59b856ae9d724c7d,
-                    "b06cd4dff23f7376af6a879f99cc5a1c": Passhash.PassHash().md5b06cd4dff23f7376af6a879f99cc5a1c,
-                    "677c3564a754183605775bac5aba623d": Passhash.PassHash().md5677c3564a754183605775bac5aba623d,
-                    "1609c51a70ab5e3d763c0d698e00eb16": Passhash.PassHash().md51609c51a70ab5e3d763c0d698e00eb16,
-                    "9d7339709d13dc7484e7090522596eda": Passhash.PassHash().md59d7339709d13dc7484e7090522596eda,
-                    "47963026aa9103eea8203b6717da2caf": Passhash.PassHash().md547963026aa9103eea8203b6717da2caf,
-                    "0feae896081ca775b997f372f93d1977": Passhash.PassHash().md50feae896081ca775b997f372f93d1977,
-                    "366e35869d52cf189f6575ef82c562e1": Passhash.PassHash().md5366e35869d52cf189f6575ef82c562e1,
-                    "c34721f06f1a5aad95fab7fc16577538": Passhash.PassHash().md5c34721f06f1a5aad95fab7fc16577538,
-                    "afa7cf6859400c6023d114abc175c24d": Passhash.PassHash().md5afa7cf6859400c6023d114abc175c24d,
-                    "2451894bb088c27b0a02ad350e35b9ad": Passhash.PassHash().md52451894bb088c27b0a02ad350e35b9ad,
-                    "e22db471405382c6d4e868c4d29d9cb5": Passhash.PassHash().md5e22db471405382c6d4e868c4d29d9cb5,
-                    "60befa83b7115d584e02dea9908a707d": Passhash.PassHash().md560befa83b7115d584e02dea9908a707d}
+        # rename the home column
+        df = df.rename(columns={df.columns[5]: "Home"})
 
+        # There may be many extra blank cols, delet them
 
-        df = options[which_cols](df)
+        df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
         # send df to the common parser
         df = self.common(df, year)
 
-        # Ensure any commonly missing values are set
+        # Add the name
         df.loc[:, 'Name'] = gen['name']
+
+        # Add the players position
         df.loc[:, 'Pos'] = gen['position']
 
         # add additional player info
@@ -109,11 +100,6 @@ class GameLog:
         df['DOB_day'] = gen['bday_day']
         df['DOB_yr'] = gen['bday_yr']
         df['College'] = gen['college']
-
-        df = df[['Name', 'Pos', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College'] +
-                Passhash.PassHash().base[1:] + ['GS'] + ['PF', 'PA'] + Passhash.PassHash().passing +
-                Passhash.PassHash().rushing + Passhash.PassHash().receiving + Passhash.PassHash().rush_sk +
-                Passhash.PassHash().scoring2p + Passhash.PassHash().scoring + Passhash.PassHash().punting]
 
         return df
 
@@ -151,7 +137,8 @@ class GameLog:
                     "7f97f3885d50fcf9b92797810856a89f": Rechash.RecHash().md57f97f3885d50fcf9b92797810856a89f,
                     "aa321161d6f3f5230259dbc4ae67299a": Rechash.RecHash().md5aa321161d6f3f5230259dbc4ae67299a,
                     "1193d47266d4acdcf1b6fca165121100": Rechash.RecHash().md51193d47266d4acdcf1b6fca165121100,
-                    "52589e869a13d76c6d0dbf066cab536f": Rechash.RecHash().md552589e869a13d76c6d0dbf066cab536f}
+                    "52589e869a13d76c6d0dbf066cab536f": Rechash.RecHash().md552589e869a13d76c6d0dbf066cab536f,
+                    "d522b9357244c20714a3b21f8f404918": Rechash.RecHash().md5d522b9357244c20714a3b21f8f404918}
 
         df = options[which_cols](df)
 
@@ -210,7 +197,8 @@ class GameLog:
                    'c35b37a5f0f696bfd1576753faffe81c': Rushhash.RushHash().md5c35b37a5f0f696bfd1576753faffe81c,
                    'aed81e3e77b9842532b5efa73458a259': Rushhash.RushHash().md5aed81e3e77b9842532b5efa73458a259,
                    '7d21a9a4ab9adde626d633fbd62db5c0': Rushhash.RushHash().md57d21a9a4ab9adde626d633fbd62db5c0,
-                   '91138c3c08c339b71b8323e2bac3aac7': Rushhash.RushHash().md591138c3c08c339b71b8323e2bac3aac7}
+                   '91138c3c08c339b71b8323e2bac3aac7': Rushhash.RushHash().md591138c3c08c339b71b8323e2bac3aac7,
+                   'ddcb0610869ff21799f008209ac6d229': Rushhash.RushHash().md5ddcb0610869ff21799f008209ac6d229}
 
         df = options[which_cols](df)
 
@@ -259,7 +247,8 @@ class GameLog:
 
         # Here we make a dict of hashes and their corresponding column parser, this is faster than if/else
         options = {'080683052961d92b5efd07588e614700': Kickhash.KickHash().md5080683052961d92b5efd07588e614700,
-                   'c0fe30e42184e7a59c00c04dc917bb87': Kickhash.KickHash().md5c0fe30e42184e7a59c00c04dc917bb87}
+                   'c0fe30e42184e7a59c00c04dc917bb87': Kickhash.KickHash().md5c0fe30e42184e7a59c00c04dc917bb87,
+                   '7ad30bf95e287937864b02dca25801bf': Kickhash.KickHash().md57ad30bf95e287937864b02dca25801bf}
 
         df = options[which_cols](df)
 
@@ -309,7 +298,8 @@ class GameLog:
                    '58ffdd172c2358c5e5ab2e0a1994252a': Defhash.DefHash().md558ffdd172c2358c5e5ab2e0a1994252a,
                    '141f3f6945aa9495c6580650649f4b8f': Defhash.DefHash().md5141f3f6945aa9495c6580650649f4b8f,
                    '109394668745222b0ccbd92bfd0ac4c1': Defhash.DefHash().md5109394668745222b0ccbd92bfd0ac4c1,
-                   '60dfaf4e946c4ae3d47c6d8b430c92a4': Defhash.DefHash().md560dfaf4e946c4ae3d47c6d8b430c92a4}
+                   '60dfaf4e946c4ae3d47c6d8b430c92a4': Defhash.DefHash().md560dfaf4e946c4ae3d47c6d8b430c92a4,
+                   'fa476dd5c907f86452c016e54b3fe0f8': Defhash.DefHash().md5fa476dd5c907f86452c016e54b3fe0f8}
 
         df = options[which_cols](df)
 

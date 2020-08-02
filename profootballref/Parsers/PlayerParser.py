@@ -15,7 +15,7 @@ class PlayerParser:
         general_stats = {}
 
         # scrape data off the players page not contained in the stats table
-        general_stats['name'] = re.compile('<h1 itemprop="name">(.*?)\s*<\/h1>').findall(html)[0]
+        general_stats['name'] = re.compile('<h1 itemprop="name">\\n\\t\\t<span>(.*)<\/span>').findall(html)[0]
 
         try:
             general_stats['position'] = re.compile('<strong>Position<\/strong>:\W([a-zA-Z]{1,})').findall(html)[0]
@@ -225,7 +225,7 @@ class PlayerParser:
         # We generally pass in a url and then load the page, for testing the function allow html to be passed in
         if url:
             response = Loader.Loader().load_page(url)
-            html = response.content.decode()
+            html = response.text
         else:
             for k, v in kwargs.items():
                 if k == 'html':
@@ -245,23 +245,9 @@ class PlayerParser:
             # pd.DataFrame.
             df = pd.read_html(html)[0]
 
-            df = df.iloc[:, :31]
-
-            cols = ['Year', 'Age', 'Tm', 'Pos', 'No.', 'G', 'GS', 'QBrec', 'Cmp', 'Att', 'Cmp%', 'Yds', 'TD', 'TD%',
-                    'Int', 'Int%', 'Lng', 'Pass_Y/A', 'AY/A', 'Y/C', 'Y/G', 'Rate', 'QBR', 'Sk', 'Sk_Yds', 'NY/A',
-                    'ANY/A', 'Sk%', '4QC', 'GWD', 'AV']
-            try:
-                df.columns = cols
-            except ValueError:
-                print('Column mismatch, check url: ', url)
             # remove the career totals row
-            df['Year'] = df['Year'].astype(str)
-            df = df[df.Year != 'Career']
-            df = df[df.Year != '1 yr']
-            df = df[df.Year != '2 yrs']
-            df = df[df.Year != '3 yrs']
-            df = df[df.Year != '4 yrs']
-            df = df[df.Year != '5 yrs']
+            df['Age'] = pd.to_numeric(df['Age'], errors='coerce')
+            df = df[~df['Age'].isna()]
 
             # remove spec characters that are sometimes added to the year to indicate probowl, all pro etc
             df['Year'] = df['Year'].str.replace('+', '')
@@ -288,11 +274,6 @@ class PlayerParser:
             df['Tm'] = df['Tm'].str.upper()
             df['Pos'] = df['Pos'].str.upper()
 
-            # rearange the dataframe columns, this is personal preference
-            df = df[['Name', 'Year', 'Age', 'Throws', 'Height', 'Weight', 'DOB_mo', 'DOB_day', 'DOB_yr', 'College',
-                     'Tm', 'Pos', 'No.', 'G', 'GS', 'QBrec', 'Cmp', 'Att', 'Cmp%', 'Yds', 'TD', 'TD%', 'Int', 'Int%',
-                     'Lng', 'Pass_Y/A', 'AY/A', 'Y/C', 'Y/G', 'Rate', 'QBR', 'Sk', 'Sk_Yds', 'NY/A', 'ANY/A', 'Sk%',
-                     '4QC', 'GWD', 'AV']]
 
             # Parse out rushing and receiving information and append to the passing info
             soup = BeautifulSoup(html, 'lxml')
@@ -320,11 +301,8 @@ class PlayerParser:
 
                     # munge the columns similar to above
                     # remove the career totals row
-                    rush_df['Year'] = rush_df['Year'].astype(str)
-                    rush_df = rush_df[rush_df.Year != 'Career']
-                    rush_df = rush_df[rush_df.Year != '1 yr']
-                    rush_df = rush_df[rush_df.Year != '2 yrs']
-                    rush_df = rush_df[rush_df.Year != '3 yrs']
+                    rush_df['Age'] = pd.to_numeric(rush_df['Age'], errors='coerce')
+                    rush_df = rush_df[~rush_df['Age'].isna()]
 
                     # remove spec characters that are sometimes added to the year to indicate probowl, all pro etc
                     rush_df['Year'] = rush_df['Year'].str.replace('+', '')

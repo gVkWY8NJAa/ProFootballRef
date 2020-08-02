@@ -32,7 +32,7 @@ class Position:
                 url = self.url % year
 
                 # parse the html
-                content = Loader.Loader().load_page(url).content.decode()
+                content = Loader.Loader().load_page(url).text
 
                 # Parse urls from the position page that point to the individuals players page
                 players = re.compile(
@@ -52,7 +52,7 @@ class Position:
             url = self.url % start
 
             # parse the html
-            content = Loader.Loader().load_page(url).content.decode()
+            content = Loader.Loader().load_page(url).text
 
             # Parse urls from the position page that point to the individuals players page
             players = re.compile(
